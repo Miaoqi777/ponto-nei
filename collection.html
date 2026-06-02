@@ -13,6 +13,12 @@
 </head>
 <body>
 
+  <!-- ========== 加载动画 ========== -->
+  <div class="loading">
+    <div class="loading__bar"></div>
+    <div class="loading__text">🫐 先斗寧</div>
+  </div>
+
   <!-- ========== 导航栏 ========== -->
   <nav class="navbar">
     <a href="index.html" class="nav-brand">
@@ -30,7 +36,7 @@
 
     <!-- 添加商品表单 -->
     <section class="form-section">
-      <div class="card form-card">
+      <div class="card form-card reveal">
         <h2>📝 添加商品到图鉴</h2>
         <form id="add-form">
           <!-- 隐藏字段：编辑模式 ID -->
@@ -79,7 +85,7 @@
 
           <!-- 按钮 -->
           <div class="form-actions">
-            <button type="submit" class="btn-primary" id="submit-btn">➕ 添加到图鉴</button>
+            <button type="submit" class="btn-arrow" id="submit-btn">添加到图鉴</button>
             <button type="button" class="btn-secondary" id="cancel-btn" onclick="resetFormDirect()">🔄 重置表单</button>
           </div>
         </form>
@@ -124,6 +130,27 @@
 
   <script src="js/collection.js"></script>
 
+  <!-- ========== 加载动画控制 ========== -->
+  <script>
+    (function() {
+      var loading = document.querySelector('.loading');
+      if (!loading) return;
+      document.body.classList.add('is-noscroll');
+      window.addEventListener('load', function() {
+        setTimeout(function() {
+          loading.classList.add('is-hidden');
+          document.body.classList.remove('is-noscroll');
+        }, 600);
+      });
+      setTimeout(function() {
+        if (!loading.classList.contains('is-hidden')) {
+          loading.classList.add('is-hidden');
+          document.body.classList.remove('is-noscroll');
+        }
+      }, 4000);
+    })();
+  </script>
+
   <!-- ========== 内联脚本：重置按钮（需要直接访问 DOM） ========== -->
   <script>
     // 表单取消按钮的回调
@@ -135,7 +162,7 @@
         preview.innerHTML = '<span class="placeholder">图片预览</span>';
         preview.classList.remove('has-image');
       }
-      document.getElementById('submit-btn').textContent = '➕ 添加到图鉴';
+      document.getElementById('submit-btn').textContent = '添加到图鉴';
     }
   </script>
 </body>

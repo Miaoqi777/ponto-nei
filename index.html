@@ -7,12 +7,17 @@
   <meta name="description" content="先斗寧（Ponto Nei）— NIJISANJI 所属 Ranunculus 组合虚拟主播。关西出身，蓝莓爱好者，粉丝名 Ponmates。">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🫐</text></svg>">
   <link rel="stylesheet" href="css/style.css">
-  <!-- Google Fonts: Noto Sans JP -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
+
+  <!-- ========== 加载动画 ========== -->
+  <div class="loading">
+    <div class="loading__bar"></div>
+    <div class="loading__text">🫐 先斗寧</div>
+  </div>
 
   <!-- ========== 导航栏 ========== -->
   <nav class="navbar">
@@ -30,13 +35,21 @@
   <section class="hero" id="home">
     <div class="hero-particles"></div>
 
+    <!-- 装饰带 -->
+    <svg class="hero-deco-band" viewBox="0 0 600 80" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 40 Q150 0 300 40 Q450 80 600 40" fill="none" stroke="#5A7DFF" stroke-width="3" opacity="0.5"/>
+      <path d="M0 50 Q150 10 300 50 Q450 90 600 50" fill="none" stroke="#8B5CF6" stroke-width="2" opacity="0.3"/>
+      <path d="M0 30 Q150 -10 300 30 Q450 70 600 30" fill="none" stroke="#A78BFA" stroke-width="1" opacity="0.2"/>
+    </svg>
+    <svg class="hero-deco-band" viewBox="0 0 600 80" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 40 Q200 80 400 40 Q500 10 600 40" fill="none" stroke="#6D28D9" stroke-width="3" opacity="0.4"/>
+      <path d="M0 50 Q200 90 400 50 Q500 20 600 50" fill="none" stroke="#7C3AED" stroke-width="2" opacity="0.3"/>
+    </svg>
+
     <!-- 头像 -->
     <div class="hero-avatar">
       <div class="hero-avatar-ring"></div>
       <div class="hero-avatar-placeholder">🫐</div>
-      <!-- 替换为实际图片：
-      <img src="images/ponto-nei.png" alt="先斗寧">
-      -->
     </div>
 
     <!-- 角色名 -->
@@ -53,30 +66,42 @@
     <!-- 社交链接 -->
     <div class="hero-social">
       <a href="https://www.youtube.com/@PontoNei" target="_blank" rel="noopener" class="social-btn youtube">
-        <!-- YouTube 图标 -->
         <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
           <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
         </svg>
         YouTube
       </a>
       <a href="https://twitter.com/ponto_nei" target="_blank" rel="noopener" class="social-btn twitter">
-        <!-- X (Twitter) 图标 -->
         <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
           <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
         </svg>
         X (Twitter)
       </a>
     </div>
+
+    <!-- 滚动提示 -->
+    <div class="hero-scroll">
+      <div class="hero-scroll__bar">
+        <div class="hero-scroll__dot"></div>
+      </div>
+      <span class="hero-scroll__text">SCROLL</span>
+    </div>
   </section>
+
+  <!-- ========== 拱形分割线 ========== -->
+  <div class="arch-divider from-hero"></div>
 
   <!-- ========== 角色简介 ========== -->
   <section class="section" id="profile">
     <h2 class="section-title">✨ 角色<span class="accent">简介</span></h2>
     <p class="section-subtitle">PROFILE</p>
+    <div class="section-dots">
+      <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
 
     <div class="profile-grid">
       <!-- 人物设定 -->
-      <div class="card profile-bio">
+      <div class="card profile-bio reveal">
         <h3>📖 人物设定</h3>
         <p>
           先斗寧是一名来自关西地区的普通学生，在一家<b>连接现实世界与异世界之间的杂货店</b>兼职打工。
@@ -91,120 +116,87 @@
       </div>
 
       <!-- 基本档案 -->
-      <div class="profile-info">
+      <div class="profile-info reveal reveal-delay-1">
         <h3>📋 基本档案</h3>
         <table class="info-table">
-          <tr>
-            <td>姓名</td>
-            <td>先斗 寧（ぽんと ねい）</td>
-          </tr>
-          <tr>
-            <td>英文名</td>
-            <td>Ponto Nei</td>
-          </tr>
-          <tr>
-            <td>所属</td>
-            <td>NIJISANJI（にじさんじ）</td>
-          </tr>
-          <tr>
-            <td>组合</td>
-            <td>Ranunculus（ラナンキュラス）</td>
-          </tr>
-          <tr>
-            <td>出道日期</td>
-            <td>2022年3月20日</td>
-          </tr>
-          <tr>
-            <td>生日</td>
-            <td>8月21日（狮子座 ♌）</td>
-          </tr>
-          <tr>
-            <td>身高</td>
-            <td>155cm</td>
-          </tr>
-          <tr>
-            <td>出身地</td>
-            <td>日本关西地区</td>
-          </tr>
-          <tr>
-            <td>粉丝名</td>
-            <td>Ponmates（ぽんめいと）</td>
-          </tr>
-          <tr>
-            <td>形象色</td>
-            <td><span class="color-dot"></span> #5A7DFF</td>
-          </tr>
-          <tr>
-            <td>绘文字</td>
-            <td>🫐（蓝莓）</td>
-          </tr>
-          <tr>
-            <td>角色设计</td>
-            <td>二色こぺ（<a href="https://twitter.com/nishikikope" target="_blank" rel="noopener" style="color:var(--accent-light);">@nishikikope</a>）</td>
-          </tr>
+          <tr><td>姓名</td><td>先斗 寧（ぽんと ねい）</td></tr>
+          <tr><td>英文名</td><td>Ponto Nei</td></tr>
+          <tr><td>所属</td><td>NIJISANJI（にじさんじ）</td></tr>
+          <tr><td>组合</td><td>Ranunculus（ラナンキュラス）</td></tr>
+          <tr><td>出道日期</td><td>2022年3月20日</td></tr>
+          <tr><td>生日</td><td>8月21日（狮子座 ♌）</td></tr>
+          <tr><td>身高</td><td>155cm</td></tr>
+          <tr><td>出身地</td><td>日本关西地区</td></tr>
+          <tr><td>粉丝名</td><td>Ponmates（ぽんめいと）</td></tr>
+          <tr><td>形象色</td><td><span class="color-dot"></span> #5A7DFF</td></tr>
+          <tr><td>绘文字</td><td>🫐（蓝莓）</td></tr>
+          <tr><td>角色设计</td><td>二色こぺ（<a href="https://twitter.com/nishikikope" target="_blank" rel="noopener" style="color:var(--accent-light);">@nishikikope</a>）</td></tr>
         </table>
       </div>
     </div>
   </section>
 
+  <!-- ========== 拱形分割线 ========== -->
+  <div class="arch-divider from-profile"></div>
+
   <!-- ========== 官方商品 & 链接 ========== -->
   <section class="section" id="goods">
     <h2 class="section-title">🛍️ 官方<span class="accent">商品</span> & 相关<span class="accent">链接</span></h2>
     <p class="section-subtitle">OFFICIAL GOODS & LINKS</p>
+    <div class="section-dots">
+      <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
 
     <div class="goods-grid">
-      <!-- NIJISANJI 官方商店 -->
-      <div class="card goods-card">
+      <div class="card goods-card reveal">
         <div class="goods-icon">🏪</div>
         <h4>NIJISANJI 官方商店</h4>
         <p>先斗寧的官方商品、生日限定周边、语音等均可在此购买。定期上新，支持国际配送。</p>
-        <a href="https://shop.nijisanji.jp/" target="_blank" rel="noopener" class="btn-outline">前往商店 →</a>
+        <a href="https://shop.nijisanji.jp/" target="_blank" rel="noopener" class="btn-arrow">前往商店</a>
       </div>
 
-      <!-- 彩虹社官方商城中文 -->
-      <div class="card goods-card">
+      <div class="card goods-card reveal reveal-delay-1">
         <div class="goods-icon">🌐</div>
         <h4>NIJISANJI EN 官方商店</h4>
         <p>英文版官方商城，方便海外粉丝购买 NIJISANJI 旗下所有 Liver 的官方周边商品。</p>
-        <a href="https://nijisanji-store.com/" target="_blank" rel="noopener" class="btn-outline">前往商店 →</a>
+        <a href="https://nijisanji-store.com/" target="_blank" rel="noopener" class="btn-arrow">前往商店</a>
       </div>
 
-      <!-- 先斗寧 Wiki -->
-      <div class="card goods-card">
+      <div class="card goods-card reveal reveal-delay-2">
         <div class="goods-icon">📚</div>
         <h4>先斗寧 — 萌娘百科</h4>
         <p>查看先斗寧的完整资料、直播历程、原创曲目、大事记等详细信息。</p>
-        <a href="https://moegirl.uk/先斗宁" target="_blank" rel="noopener" class="btn-outline">查看百科 →</a>
+        <a href="https://moegirl.uk/先斗宁" target="_blank" rel="noopener" class="btn-arrow">查看百科</a>
       </div>
 
-      <!-- NIJISANJI 官方频道 -->
-      <div class="card goods-card">
+      <div class="card goods-card reveal reveal-delay-3">
         <div class="goods-icon">🎬</div>
         <h4>NIJISANJI 官方频道</h4>
         <p>彩虹社官方 YouTube 频道，包括大型活动、演唱会、3D披露会等官方直播与视频。</p>
-        <a href="https://www.youtube.com/@nijisanji" target="_blank" rel="noopener" class="btn-outline">前往频道 →</a>
+        <a href="https://www.youtube.com/@nijisanji" target="_blank" rel="noopener" class="btn-arrow">前往频道</a>
       </div>
 
-      <!-- Ranunculus 组合曲 -->
-      <div class="card goods-card">
+      <div class="card goods-card reveal reveal-delay-4">
         <div class="goods-icon">🎵</div>
         <h4>Ranunculus 组合曲</h4>
         <p>出道原创曲《DONBURA KONBURA SPEAKERS》，由 MONACA 广川惠一作词作曲。</p>
-        <a href="https://www.youtube.com/results?search_query=Ranunculus+DONBURA+KONBURA+SPEAKERS" target="_blank" rel="noopener" class="btn-outline">试听 →</a>
+        <a href="https://www.youtube.com/results?search_query=Ranunculus+DONBURA+KONBURA+SPEAKERS" target="_blank" rel="noopener" class="btn-arrow">试听</a>
       </div>
 
-      <!-- 个人专辑 FOCUS ON -->
-      <div class="card goods-card">
+      <div class="card goods-card reveal reveal-delay-5">
         <div class="goods-icon">💿</div>
         <h4>个人专辑『FOCUS ON』</h4>
         <p>2023年2月22日发行的个人专辑，收录多首原创及翻唱曲目，可在各大音乐平台收听。</p>
-        <a href="https://www.youtube.com/playlist?list=PLVmWqMpSXxGKTMJdTqBwRJ4QJFqYR6q4-" target="_blank" rel="noopener" class="btn-outline">试听 →</a>
+        <a href="https://www.youtube.com/playlist?list=PLVmWqMpSXxGKTMJdTqBwRJ4QJFqYR6q4-" target="_blank" rel="noopener" class="btn-arrow">试听</a>
       </div>
     </div>
   </section>
 
+  <!-- ========== 拱形分割线 ========== -->
+  <div class="arch-divider from-goods"></div>
+
   <!-- ========== 页脚 ========== -->
-  <footer class="footer">
+  <footer class="footer reveal">
     <p>
       🫐 先斗寧 (Ponto Nei) © <a href="https://www.nijisanji.jp/" target="_blank" rel="noopener">ANYCOLOR Inc.</a>
       &nbsp;|&nbsp; NIJISANJI 所属虚拟主播

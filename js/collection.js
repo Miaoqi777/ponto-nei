@@ -348,7 +348,7 @@ function startEdit(id) {
 
   const submitBtn = document.getElementById('submit-btn');
   if (submitBtn) {
-    submitBtn.textContent = '💾 保存修改';
+    submitBtn.textContent = '保存修改';
   }
 
   // 滚动到表单

@@ -1,16 +1,48 @@
 /* ============================================
    先斗寧 (Ponto Nei) — 主页交互逻辑
+   加载动画 + 导航栏 + 粒子 + 滚动入场动画
    ============================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
+  initLoading();
   initNavbar();
   initParticles();
+  initScrollReveal();
   initSmoothScroll();
 });
 
-/**
- * 导航栏滚动阴影效果
- */
+/* ============================================
+   加载动画
+   ============================================ */
+
+function initLoading() {
+  const loading = document.querySelector('.loading');
+  if (!loading) return;
+
+  // 禁止滚动
+  document.body.classList.add('is-noscroll');
+
+  // 页面完全加载后隐藏 loading
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      loading.classList.add('is-hidden');
+      document.body.classList.remove('is-noscroll');
+    }, 600); // 稍微延迟让动画更好看
+  });
+
+  // 兜底：3秒后强制隐藏
+  setTimeout(() => {
+    if (!loading.classList.contains('is-hidden')) {
+      loading.classList.add('is-hidden');
+      document.body.classList.remove('is-noscroll');
+    }
+  }, 4000);
+}
+
+/* ============================================
+   导航栏滚动阴影
+   ============================================ */
+
 function initNavbar() {
   const navbar = document.querySelector('.navbar');
 
@@ -36,9 +68,10 @@ function initNavbar() {
   });
 }
 
-/**
- * 生成 Hero 区域的漂浮粒子动画
- */
+/* ============================================
+   Hero 漂浮粒子
+   ============================================ */
+
 function initParticles() {
   const container = document.querySelector('.hero-particles');
   if (!container) return;
@@ -59,9 +92,34 @@ function initParticles() {
   }
 }
 
-/**
- * 平滑滚动到锚点
- */
+/* ============================================
+   滚动触发入场动画（Intersection Observer）
+   ============================================ */
+
+function initScrollReveal() {
+  const revealElements = document.querySelectorAll('.reveal');
+  if (!revealElements.length) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('revealed');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {
+    root: null,
+    rootMargin: '0px 0px -60px 0px', // 元素进入视口 60px 后触发
+    threshold: 0.1,
+  });
+
+  revealElements.forEach(el => observer.observe(el));
+}
+
+/* ============================================
+   平滑滚动到锚点
+   ============================================ */
+
 function initSmoothScroll() {
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
