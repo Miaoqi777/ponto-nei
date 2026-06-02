@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>我的图鉴 | 先斗寧 (Ponto Nei)</title>
+  <meta name="description" content="先斗寧商品图鉴管理 — 上传图片、记录价格、管理数量、保存购买链接。">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🫐</text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ========== 导航栏 ========== -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-brand">
+      <span class="brand-emoji">🫐</span>
+      <span class="brand-gradient">先斗寧</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">🏠 角色介绍</a></li>
+      <li><a href="collection.html">📦 我的图鉴</a></li>
+    </ul>
+  </nav>
+
+  <!-- ========== 页面容器 ========== -->
+  <div class="page-container">
+
+    <!-- 添加商品表单 -->
+    <section class="form-section">
+      <div class="card form-card">
+        <h2>📝 添加商品到图鉴</h2>
+        <form id="add-form">
+          <!-- 隐藏字段：编辑模式 ID -->
+          <input type="hidden" id="edit-id" value="">
+
+          <div class="form-grid">
+            <!-- 图片上传 -->
+            <div class="form-group">
+              <label>📷 商品图片</label>
+              <input type="file" id="item-image" accept="image/*">
+              <div class="image-preview" id="image-preview">
+                <span class="placeholder">图片预览</span>
+              </div>
+            </div>
+
+            <!-- 商品名称 -->
+            <div class="form-group">
+              <label>🏷️ 商品名称 <span style="color:#FF6B6B;">*</span></label>
+              <input type="text" id="item-name" placeholder="例：先斗寧 生日纪念亚克力立牌" required>
+            </div>
+
+            <!-- 价格 -->
+            <div class="form-group">
+              <label>💰 价格（日元 ¥） <span style="color:#FF6B6B;">*</span></label>
+              <input type="number" id="item-price" placeholder="例：2000" min="0" step="1" required>
+            </div>
+
+            <!-- 数量 -->
+            <div class="form-group">
+              <label>📦 持有数量 <span style="color:#FF6B6B;">*</span></label>
+              <input type="number" id="item-quantity" placeholder="例：1" min="1" step="1" value="1" required>
+            </div>
+
+            <!-- 购买链接 -->
+            <div class="form-group full">
+              <label>🔗 购买链接</label>
+              <input type="url" id="item-link" placeholder="例：https://shop.nijisanji.jp/...">
+            </div>
+
+            <!-- 备注 -->
+            <div class="form-group full">
+              <label>💬 备注</label>
+              <textarea id="item-note" placeholder="例：2023年生日限定、会场限定等..." rows="2"></textarea>
+            </div>
+          </div>
+
+          <!-- 按钮 -->
+          <div class="form-actions">
+            <button type="submit" class="btn-primary" id="submit-btn">➕ 添加到图鉴</button>
+            <button type="button" class="btn-secondary" id="cancel-btn" onclick="resetFormDirect()">🔄 重置表单</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- 图鉴展示区 -->
+    <section>
+      <!-- 控制栏 -->
+      <div class="collection-controls">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="search-input" placeholder="搜索商品名称或备注...">
+        </div>
+        <select class="sort-select" id="sort-select">
+          <option value="newest">🕐 最新添加</option>
+          <option value="name">🔤 名称排序</option>
+          <option value="price-asc">💰 价格从低到高</option>
+          <option value="price-desc">💎 价格从高到低</option>
+        </select>
+        <span class="count-badge" id="collection-count">共 0 件商品</span>
+      </div>
+
+      <!-- 图鉴网格 -->
+      <div class="collection-grid" id="collection-grid">
+        <!-- JS 动态渲染 -->
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ========== 页脚 ========== -->
+  <footer class="footer">
+    <p>
+      🫐 先斗寧 (Ponto Nei) © <a href="https://www.nijisanji.jp/" target="_blank" rel="noopener">ANYCOLOR Inc.</a>
+      &nbsp;|&nbsp; 商品数据存储在本地浏览器中
+    </p>
+    <p style="margin-top:0.5rem;font-size:0.78rem;">
+      本站为粉丝自制页面，与 ANYCOLOR 官方无关。
+    </p>
+  </footer>
+
+  <script src="js/collection.js"></script>
+
+  <!-- ========== 内联脚本：重置按钮（需要直接访问 DOM） ========== -->
+  <script>
+    // 表单取消按钮的回调
+    function resetFormDirect() {
+      document.getElementById('add-form').reset();
+      document.getElementById('edit-id').value = '';
+      const preview = document.getElementById('image-preview');
+      if (preview) {
+        preview.innerHTML = '<span class="placeholder">图片预览</span>';
+        preview.classList.remove('has-image');
+      }
+      document.getElementById('submit-btn').textContent = '➕ 添加到图鉴';
+    }
+  </script>
+</body>
+</html>
