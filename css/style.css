@@ -1799,3 +1799,237 @@ body.is-noscroll {
 	    width: 100%;
 	  }
 	}
+
+/* ============================================
+   高级搜索面板
+   ============================================ */
+
+.search-panel {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0.8rem 2rem;
+}
+
+.search-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.45rem 1.2rem;
+  border-radius: 50px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: var(--bg);
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: var(--font-jp);
+  transition: var(--transition);
+  user-select: none;
+}
+
+.search-toggle:hover {
+  border-color: var(--primary-light);
+  color: var(--primary);
+}
+
+.search-toggle.active {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.search-toggle.has-filter {
+  border-color: var(--accent);
+  color: #fff;
+  background: var(--accent);
+}
+
+.search-body {
+  display: none;
+  margin-top: 0.8rem;
+  padding: 1.2rem 1.5rem;
+  background: var(--bg);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: var(--radius);
+}
+
+.search-body.expanded {
+  display: block;
+}
+
+.search-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  margin-bottom: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.search-row:last-of-type {
+  margin-bottom: 0.6rem;
+}
+
+.search-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  padding-top: 0.35rem;
+  min-width: 3.5rem;
+}
+
+.search-cats {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.search-cat-checkbox {
+  cursor: pointer;
+  user-select: none;
+}
+
+.search-cat-checkbox input {
+  display: none;
+}
+
+.search-cat-checkbox span {
+  display: inline-block;
+  padding: 0.35rem 0.9rem;
+  border-radius: 50px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: var(--bg);
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.search-cat-checkbox:hover span {
+  border-color: var(--primary-light);
+  color: var(--primary);
+}
+
+.search-cat-checkbox input:checked + span {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 200px;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-family: var(--font-jp);
+  color: var(--text);
+  background: var(--bg);
+  transition: var(--transition);
+  outline: none;
+}
+
+.search-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.08);
+}
+
+.search-input::placeholder {
+  color: var(--text-muted);
+}
+
+.search-date-options {
+  display: flex;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+
+.search-date-options label {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.search-date-options input[type="radio"] {
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.search-date-inputs {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.3rem;
+}
+
+.search-date-select,
+.search-date-input {
+  padding: 0.4rem 0.8rem;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-family: var(--font-jp);
+  color: var(--text);
+  background: var(--bg);
+  outline: none;
+  transition: var(--transition);
+}
+
+.search-date-select:focus,
+.search-date-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.08);
+}
+
+.search-clear {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.35rem 0.8rem;
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  cursor: pointer;
+  font-family: var(--font-jp);
+  transition: color 0.2s ease;
+}
+
+.search-clear:hover {
+  color: #d44;
+}
+
+/* --- 搜索面板响应式 --- */
+@media (max-width: 768px) {
+  .search-panel {
+    padding: 0.5rem 1.2rem;
+  }
+  .search-body {
+    padding: 1rem 1rem;
+  }
+  .search-row {
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .search-label {
+    min-width: auto;
+    padding-top: 0;
+  }
+  .search-input {
+    min-width: auto;
+    width: 100%;
+  }
+  .search-date-options {
+    gap: 0.2rem;
+  }
+  .search-date-options label {
+    font-size: 0.72rem;
+  }
+  .search-cat-checkbox span {
+    padding: 0.3rem 0.7rem;
+    font-size: 0.72rem;
+  }
+}
