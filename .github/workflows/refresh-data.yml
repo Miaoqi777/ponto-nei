@@ -26,8 +26,6 @@ jobs:
         run: node scripts/fetch-videos.mjs
 
       - name: Fetch Twitter tweets
-        env:
-          X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
         run: node scripts/fetch-tweets.mjs
 
       - name: Commit and push if changed
