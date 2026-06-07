@@ -47,23 +47,25 @@ async function fetchRSS() {
   while ((match = itemRe.exec(xml)) !== null) {
     const item = match[1];
 
-    const title = extractTag(item, 'title');
     const link = extractTag(item, 'link');
-    const desc = extractTag(item, 'description');
     const pubDate = extractTag(item, 'pubDate');
 
-    // 提取推文 ID（从链接）
+    // 提取推文 ID（从链接 /status/123456 格式）
     const idMatch = link.match(/\/status\/(\d+)/);
-    const id = idMatch ? idMatch[1] : link.split('/').filter(Boolean).pop();
+    const id = idMatch ? idMatch[1] : '';
 
-    // 合并标题和描述
-    let text = title || '';
-    if (desc) {
-      const cleanDesc = desc.replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"');
-      if (cleanDesc !== text) text = cleanDesc;
-    }
+    // 使用 title 作为正文
+    let title = extractTag(item, 'title');
+    title = title.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'");
+    title = title.replace(/<!\[CDATA\[/g, '').replace(/\]\]>/g, '');
 
-    if (!id || !text) continue;
+    // 清理 RSS 残留
+    title = title.replace(/\s*—\s*\S+\s*@\S+.*$/s, '');
+    title = title.trim();
+
+    if (!id || !title) continue;
+
+    let text = title;
 
     tweets.push({
       id,
