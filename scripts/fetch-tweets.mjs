@@ -26,6 +26,9 @@ const MAX_RESULTS = 100; // 每次最多100条，免费套餐够用
 const RAW_TOKEN = process.env.X_BEARER_TOKEN || '';
 const BEARER_TOKEN = decodeURIComponent(RAW_TOKEN);
 
+// 调试信息
+let DEBUG_LOG = [];
+
 // ── 分类关键词 ──────────────────────────────────────
 const STREAM_KEYWORDS = [
   '配信', '生放送', 'ライブ', 'live', '放送', '枠',
@@ -54,19 +57,30 @@ function detectCategory(tweet) {
 // ── X API v2 请求 ───────────────────────────────────
 async function xApi(path) {
   const url = API_BASE + path;
-  const resp = await fetch(url, {
-    headers: {
-      'Authorization': 'Bearer ' + BEARER_TOKEN,
-      'User-Agent': 'ponto-nei-fansite/1.0',
-    },
-  });
+  DEBUG_LOG.push('GET ' + url);
+  DEBUG_LOG.push('Token (first 20): ' + BEARER_TOKEN.slice(0, 20) + '...');
+
+  let resp;
+  try {
+    resp = await fetch(url, {
+      headers: {
+        'Authorization': 'Bearer ' + BEARER_TOKEN,
+        'User-Agent': 'ponto-nei-fansite/1.0',
+      },
+    });
+  } catch (err) {
+    DEBUG_LOG.push('FETCH ERROR: ' + err.message);
+    throw err;
+  }
+
+  const body = await resp.text();
+  DEBUG_LOG.push('HTTP ' + resp.status + ': ' + body.slice(0, 500));
 
   if (!resp.ok) {
-    const body = await resp.text();
     throw new Error('X API HTTP ' + resp.status + ': ' + body.slice(0, 300));
   }
 
-  return resp.json();
+  return JSON.parse(body);
 }
 
 async function getUserId(username) {
@@ -168,10 +182,12 @@ async function main() {
 
 function keepExisting(reason) {
   console.warn('  原因: ' + reason);
+  DEBUG_LOG.push('keepExisting: ' + reason);
   if (existsSync(OUTPUT_PATH)) {
     try {
       const existing = JSON.parse(readFileSync(OUTPUT_PATH, 'utf-8'));
       existing.lastUpdated = new Date().toISOString();
+      existing._debug = DEBUG_LOG;
       writeFileSync(OUTPUT_PATH, JSON.stringify(existing, null, 2), 'utf-8');
       console.log('  已更新 lastUpdated，保留现有 ' + (existing.tweets?.length || 0) + ' 条');
     } catch {
@@ -184,10 +200,12 @@ function keepExisting(reason) {
 
 main().catch(err => {
   console.warn('⚠️ 推文获取失败: ' + err.message);
+  DEBUG_LOG.push('FATAL: ' + err.message);
   if (existsSync(OUTPUT_PATH)) {
     try {
       const existing = JSON.parse(readFileSync(OUTPUT_PATH, 'utf-8'));
       existing.lastUpdated = new Date().toISOString();
+      existing._debug = DEBUG_LOG;
       writeFileSync(OUTPUT_PATH, JSON.stringify(existing, null, 2), 'utf-8');
     } catch {}
   }
