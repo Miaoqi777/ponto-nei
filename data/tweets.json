@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-07T17:39:57.203Z",
+  "lastUpdated": "2026-06-07T17:42:17.210Z",
   "username": "ponto_nei",
   "displayName": "先斗寧",
   "tweets": [
@@ -108,7 +108,8 @@
     "Try fxtwitter: https://api.fxtwitter.com/user/ponto_nei",
     "fxtwitter fail: HTTP 404",
     "Try HTML scrape: https://x.com/ponto_nei",
-    "Found tweet script: <script type=\"text/javascript\" charset=\"utf-8\" nonce=\"OWQ1MjcxMzEtYmJiNi00ZDc4LTk3MjItNjQ0NDJlODE4ZGZh\">window.__INITIAL_STATE__={\"optimist\":[],\"entities\":{\"broadcasts\":{\"entities\":{},\"errors\":{},\"fet",
+    "__INITIAL_STATE__ parse fail: Unexpected non-whitespace character after JSON at position 168776 (line 1 column 168777)",
+    "No tweet data found in HTML",
     "keepExisting: 所有渠道均无推文返回"
   ]
 }
