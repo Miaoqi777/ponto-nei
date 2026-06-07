@@ -1,9 +1,8 @@
 /**
  * Twitter/X 推文数据获取脚本
- * 使用 cdn.syndication.twimg.com 公开端点（无需 API key）
+ * 使用 X API v2（免费套餐，Bearer Token 认证）
+ * 环境变量: X_BEARER_TOKEN
  * 输出: data/tweets.json
- *
- * 注意: syndication 端点不稳定，失败时保留现有数据不变
  *
  * 运行: node scripts/fetch-tweets.mjs
  */
@@ -18,7 +17,16 @@ const DATA_DIR = join(ROOT, 'data');
 
 const TWITTER_USERNAME = 'ponto_nei';
 const OUTPUT_PATH = join(DATA_DIR, 'tweets.json');
+const API_BASE = 'https://api.x.com/2';
 
+// X API v2 免费限制: 每月100次 GET，每天跑一次消耗2次(ponto_nei)
+const MAX_RESULTS = 100; // 每次最多100条，免费套餐够用
+
+// Bearer Token（支持 URL 编码的 token）
+const RAW_TOKEN = process.env.X_BEARER_TOKEN || '';
+const BEARER_TOKEN = decodeURIComponent(RAW_TOKEN);
+
+// ── 分类关键词 ──────────────────────────────────────
 const STREAM_KEYWORDS = [
   '配信', '生放送', 'ライブ', 'live', '放送', '枠',
   '開始', 'スタート', '予定', '今夜', '明日', '本日',
@@ -43,88 +51,103 @@ function detectCategory(tweet) {
   return '日常推文';
 }
 
+// ── X API v2 请求 ───────────────────────────────────
+async function xApi(path) {
+  const url = API_BASE + path;
+  const resp = await fetch(url, {
+    headers: {
+      'Authorization': 'Bearer ' + BEARER_TOKEN,
+      'User-Agent': 'ponto-nei-fansite/1.0',
+    },
+  });
+
+  if (!resp.ok) {
+    const body = await resp.text();
+    throw new Error('X API HTTP ' + resp.status + ': ' + body.slice(0, 300));
+  }
+
+  return resp.json();
+}
+
 async function getUserId(username) {
-  const url = 'https://cdn.syndication.twimg.com/widgets/followbutton/info.json?screen_names=' + username;
-  const resp = await fetch(url);
-  if (!resp.ok) throw new Error('HTTP ' + resp.status);
-  const data = await resp.json();
-  if (!Array.isArray(data) || !data[0]?.id) throw new Error('Invalid response');
-  return data[0].id;
+  const data = await xApi('/users/by/username/' + username);
+  if (!data.data?.id) throw new Error('User not found: ' + username);
+  return data.data.id;
 }
 
-async function fetchTimeline(userId) {
-  const url = 'https://cdn.syndication.twimg.com/timeline/profile/' + userId + '?suppress_response_codes=true';
-  const resp = await fetch(url);
-  if (!resp.ok) throw new Error('HTTP ' + resp.status);
-  const text = await resp.text();
-
-  try {
-    const data = JSON.parse(text);
-    const body = data?.body || '';
-    // Extract tweets from HTML body
-    const tweets = [];
-    const tweetRegex = /<li[^>]*class="[^"]*timeline-tweet[^"]*"[^>]*data-tweet-id="(\d+)"[^>]*>/g;
-    let match;
-    while ((match = tweetRegex.exec(body)) !== null) {
-      tweets.push({ id_str: match[1] });
-    }
-
-    // Also try JSON embedded data
-    if (data?.tweets) tweets.push(...data.tweets.map(t => ({ id_str: t.id_str || t.id })));
-    if (data?.items) tweets.push(...data.items.map(t => ({ id_str: t.id_str || t.id })));
-
-    return tweets.map(t => ({
-      id: t.id_str || t.id || '',
-      text: t.text || t.full_text || t.description || '',
-      createdAt: t.created_at || t.date || new Date().toISOString(),
-      url: 'https://x.com/' + TWITTER_USERNAME + '/status/' + (t.id_str || t.id),
-      media: [],
-      isRetweet: !!(t.retweeted_status || t.is_quote_status),
-      retweetSource: t.retweeted_status?.user?.screen_name || null,
-      likes: t.favorite_count || t.likes || 0,
-      retweets: t.retweet_count || t.retweets || 0,
-    }));
-  } catch {
-    return [];
-  }
+async function getTweets(userId, paginationToken) {
+  let path = '/users/' + userId + '/tweets'
+    + '?max_results=' + MAX_RESULTS
+    + '&tweet.fields=created_at,public_metrics'
+    + '&exclude=retweets,replies';
+  if (paginationToken) path += '&pagination_token=' + paginationToken;
+  return xApi(path);
 }
 
+// ── 主流程 ──────────────────────────────────────────
 async function main() {
-  console.log('🐦 获取 Twitter 推文数据... (@' + TWITTER_USERNAME + ')');
+  console.log('🐦 获取 X 推文数据... (@' + TWITTER_USERNAME + ')');
 
-  let tweets = [];
+  if (!BEARER_TOKEN) {
+    console.warn('⚠️ 未设置 X_BEARER_TOKEN 环境变量');
+    keepExisting('无 API Token');
+    return;
+  }
+
+  let userId;
   try {
-    const userId = await getUserId(TWITTER_USERNAME);
+    userId = await getUserId(TWITTER_USERNAME);
     console.log('  User ID: ' + userId);
-    tweets = await fetchTimeline(userId);
-    console.log('  获取到 ' + tweets.length + ' 条推文');
   } catch (err) {
-    console.warn('⚠️ Syndication 端点不可用: ' + err.message);
-    console.warn('  将保留现有数据不变');
-
-    // Check if existing data exists
-    if (existsSync(OUTPUT_PATH)) {
-      const existing = JSON.parse(readFileSync(OUTPUT_PATH, 'utf-8'));
-      existing.lastUpdated = new Date().toISOString();
-      writeFileSync(OUTPUT_PATH, JSON.stringify(existing, null, 2), 'utf-8');
-      console.log('  已更新 lastUpdated，现有 ' + (existing.tweets?.length || 0) + ' 条推文保留');
-      process.exit(0);
-    }
-    console.log('  无现有数据，跳过');
-    process.exit(0);
+    console.warn('⚠️ 获取用户 ID 失败: ' + err.message);
+    keepExisting('用户查询失败');
+    return;
   }
 
-  if (tweets.length === 0) {
-    console.warn('⚠️ 未获取到推文，保留现有数据');
-    if (existsSync(OUTPUT_PATH)) {
-      const existing = JSON.parse(readFileSync(OUTPUT_PATH, 'utf-8'));
-      existing.lastUpdated = new Date().toISOString();
-      writeFileSync(OUTPUT_PATH, JSON.stringify(existing, null, 2), 'utf-8');
-    }
-    process.exit(0);
+  let allTweets = [];
+  let paginationToken = null;
+  let pages = 0;
+
+  try {
+    do {
+      pages++;
+      const data = await getTweets(userId, paginationToken);
+      const tweets = data.data || [];
+      console.log('  第' + pages + '页: ' + tweets.length + ' 条推文');
+
+      for (const t of tweets) {
+        const metrics = t.public_metrics || {};
+        allTweets.push({
+          id: t.id,
+          text: t.text || '',
+          createdAt: t.created_at || new Date().toISOString(),
+          url: 'https://x.com/' + TWITTER_USERNAME + '/status/' + t.id,
+          media: [], // 免费 API 不含媒体 URL（需额外 expansions）
+          isRetweet: false, // 已 exclude=retweets
+          retweetSource: null,
+          likes: metrics.like_count || 0,
+          retweets: metrics.retweet_count || 0,
+        });
+      }
+
+      paginationToken = data.meta?.next_token;
+    } while (paginationToken && pages < 5); // 最多5页=500条，避免超出月限额
+
+    console.log('  共获取 ' + allTweets.length + ' 条推文');
+  } catch (err) {
+    console.warn('⚠️ 获取推文失败: ' + err.message);
+    keepExisting('推文获取失败');
+    return;
   }
 
-  const classified = tweets.map(t => ({ ...t, category: detectCategory(t) }));
+  if (allTweets.length === 0) {
+    console.warn('⚠️ 未获取到推文');
+    keepExisting('无推文返回');
+    return;
+  }
+
+  // 分类
+  const classified = allTweets.map(t => ({ ...t, category: detectCategory(t) }));
 
   const output = {
     lastUpdated: new Date().toISOString(),
@@ -133,10 +156,7 @@ async function main() {
     tweets: classified,
   };
 
-  if (!existsSync(DATA_DIR)) {
-    mkdirSync(DATA_DIR, { recursive: true });
-  }
-
+  if (!existsSync(DATA_DIR)) mkdirSync(DATA_DIR, { recursive: true });
   writeFileSync(OUTPUT_PATH, JSON.stringify(output, null, 2), 'utf-8');
 
   const counts = {};
@@ -146,9 +166,24 @@ async function main() {
   console.log('  分类统计: ' + JSON.stringify(counts));
 }
 
+function keepExisting(reason) {
+  console.warn('  原因: ' + reason);
+  if (existsSync(OUTPUT_PATH)) {
+    try {
+      const existing = JSON.parse(readFileSync(OUTPUT_PATH, 'utf-8'));
+      existing.lastUpdated = new Date().toISOString();
+      writeFileSync(OUTPUT_PATH, JSON.stringify(existing, null, 2), 'utf-8');
+      console.log('  已更新 lastUpdated，保留现有 ' + (existing.tweets?.length || 0) + ' 条');
+    } catch {
+      console.log('  无有效现有数据，跳过');
+    }
+  } else {
+    console.log('  无现有数据，跳过');
+  }
+}
+
 main().catch(err => {
   console.warn('⚠️ 推文获取失败: ' + err.message);
-  console.warn('  保留现有数据不变');
   if (existsSync(OUTPUT_PATH)) {
     try {
       const existing = JSON.parse(readFileSync(OUTPUT_PATH, 'utf-8'));
@@ -156,5 +191,5 @@ main().catch(err => {
       writeFileSync(OUTPUT_PATH, JSON.stringify(existing, null, 2), 'utf-8');
     } catch {}
   }
-  process.exit(0); // Never fail the workflow due to Twitter issues
+  process.exit(0);
 });
