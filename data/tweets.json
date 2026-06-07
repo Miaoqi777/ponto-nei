@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-07T17:44:04.324Z",
+  "lastUpdated": "2026-06-07T17:46:42.785Z",
   "username": "ponto_nei",
   "displayName": "先斗寧",
   "tweets": [
@@ -101,17 +101,17 @@
     }
   ],
   "_debug": [
+    "Try RSSHub: https://rsshub.app/twitter/user/ponto_nei",
+    "RSSHub HTTP 404",
+    "Try RSSHub: https://rsshub.rssforever.com/twitter/user/ponto_nei",
+    "RSSHub HTTP 503",
+    "Try RSSHub: https://rss.shab.fun/twitter/user/ponto_nei",
+    "RSSHub fail: fetch failed",
+    "Fetch x.com homepage for cookies...",
+    "Got guest_id cookie",
+    "Guest token fail: {\"code\":200,\"message\":\"Forbidden.\"}",
     "Try Nitter: https://nitter.poast.org/ponto_nei/rss",
     "Try Nitter: https://xcancel.com/ponto_nei/rss",
-    "Try Nitter: https://nitter.net/ponto_nei/rss",
-    "Nitter RSS: ",
-    "Try fxtwitter: https://api.fxtwitter.com/user/ponto_nei",
-    "fxtwitter fail: HTTP 404",
-    "Try HTML scrape: https://x.com/ponto_nei",
-    "__INITIAL_STATE__ JSON length: 168776",
-    "Parsed OK, keys: optimist, entities, featureSwitch, settings, devices, session, snoozedTags, developer",
-    "Searched state, found 0 unique tweets",
-    "No tweet data found in HTML",
-    "keepExisting: 所有渠道均无推文返回"
+    "keepExisting: all failed"
   ]
 }
