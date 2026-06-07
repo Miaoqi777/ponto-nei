@@ -50,7 +50,39 @@
       <!-- 元信息栏 -->
       <div class="archive-meta">
         <span class="updated" id="archive-updated">最終更新: 読み込み中...</span>
+        <span class="meta-spacer"></span>
+        <button class="search-toggle" id="manual-toggle">✏️ 手动添加</button>
         <span class="count-badge" id="archive-count">共 0 条推文</span>
+      </div>
+
+      <!-- 手动添加面板 -->
+      <div class="search-body" id="manual-body">
+        <form id="manual-form" class="manual-form">
+          <div class="search-row">
+            <label class="search-label" for="manual-url">推文链接</label>
+            <input type="url" class="search-input" id="manual-url"
+                   placeholder="https://x.com/ponto_nei/status/123456...">
+          </div>
+          <div class="search-row">
+            <label class="search-label" for="manual-text">正文</label>
+            <textarea class="search-input" id="manual-text" rows="3"
+                      placeholder="粘贴推文内容..."></textarea>
+          </div>
+          <div class="search-row">
+            <label class="search-label" for="manual-date">日期</label>
+            <input type="date" class="search-date-input" id="manual-date">
+            <label class="search-label" for="manual-category" style="margin-left:1rem;">分类</label>
+            <select class="search-date-select" id="manual-category">
+              <option value="日常推文">💬 日常推文</option>
+              <option value="直播预告">📡 直播预告</option>
+              <option value="视频和短视频预告">🎬 视频/短视频预告</option>
+            </select>
+          </div>
+          <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
+            <button type="submit" class="btn-submit">✅ 添加推文</button>
+            <button type="button" class="btn-outline-sm" id="manual-export">📋 导出数据</button>
+          </div>
+        </form>
       </div>
 
       <!-- 推文卡片列表 -->

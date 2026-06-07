@@ -1,41 +1,37 @@
 /* ============================================
    先斗寧 (Ponto Nei) — 推文整理逻辑
-   读取 data/tweets.json，分类过滤，渲染卡片
    ============================================ */
 
 const TWEET_CATEGORIES = [
   { key: 'all',             label: '🐦 全部推文' },
-  { key: '转发直播联动',     label: '🔄 转发直播联动' },
   { key: '直播预告',         label: '📡 直播预告' },
   { key: '视频和短视频预告', label: '🎬 视频/短视频预告' },
   { key: '日常推文',         label: '💬 日常推文' },
+  { key: '手动添加',         label: '✏️ 手动添加' },
 ];
 
 let allTweets = [];
 let currentFilter = 'all';
+const LS_KEY = 'ponto-nei-manual-tweets';
 
 document.addEventListener('DOMContentLoaded', () => {
   initNavbar();
   fetchAndRender();
+  initManualForm();
 });
 
-/**
- * 导航栏 — 滚动阴影 + 当前页高亮
- */
 function initNavbar() {
   const navbar = document.querySelector('.navbar');
   if (!navbar) return;
-
   window.addEventListener('scroll', () => {
     navbar.classList.toggle('scrolled', window.scrollY > 10);
   }, { passive: true });
-
   const link = document.querySelector('.nav-links a[href="tweets.html"]');
   if (link) link.classList.add('active');
 }
 
 /**
- * 获取数据并渲染
+ * 加载多数据源并合并
  */
 async function fetchAndRender() {
   const grid = document.getElementById('tweet-grid');
@@ -46,30 +42,50 @@ async function fetchAndRender() {
     <span>読み込み中...</span>
   </div>`;
 
+  let autoTweets = [];
+  let manualTweets = [];
+
+  // 1. 自动推文 (data/tweets.json)
   try {
     const resp = await fetch('data/tweets.json');
-    if (!resp.ok) throw new Error('HTTP ' + resp.status);
-    const data = await resp.json();
-    allTweets = data.tweets || [];
-    document.getElementById('archive-updated').textContent =
-      '最終更新: ' + new Date(data.lastUpdated).toLocaleDateString('ja-JP');
-  } catch (err) {
-    grid.innerHTML = `<div class="empty-state">
-      <span class="empty-icon">🐦</span>
-      <h3>推文数据加载失败</h3>
-      <p>请稍后刷新页面重试</p>
-    </div>`;
-    return;
-  }
+    if (resp.ok) {
+      const data = await resp.json();
+      autoTweets = data.tweets || [];
+      document.getElementById('archive-updated').textContent =
+        '最終更新: ' + new Date(data.lastUpdated).toLocaleDateString('ja-JP');
+    }
+  } catch {}
 
+  // 2. 手动推文 (data/tweets-manual.json)
+  try {
+    const resp = await fetch('data/tweets-manual.json');
+    if (resp.ok) {
+      const data = await resp.json();
+      manualTweets = data || [];
+    }
+  } catch {}
+
+  // 3. localStorage 手动推文
+  try {
+    const localTweets = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
+    manualTweets = manualTweets.concat(localTweets);
+  } catch {}
+
+  // 合并去重
+  const seen = new Set();
+  const merged = [];
+  for (const t of autoTweets) { seen.add(t.id); merged.push({ ...t, source: 'auto' }); }
+  for (const t of manualTweets) {
+    if (!seen.has(t.id)) { seen.add(t.id); merged.push({ ...t, source: 'manual' }); }
+  }
+  merged.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+  allTweets = merged;
   buildFilterTabs();
   updateMeta();
   renderTweets();
 }
 
-/**
- * 构建过滤标签（带各分类计数）
- */
 function buildFilterTabs() {
   const container = document.getElementById('filter-bar');
   if (!container) return;
@@ -77,7 +93,10 @@ function buildFilterTabs() {
   const counts = {};
   counts['all'] = allTweets.length;
   TWEET_CATEGORIES.forEach(cat => {
-    if (cat.key !== 'all') {
+    if (cat.key === 'all') return;
+    if (cat.key === '手动添加') {
+      counts[cat.key] = allTweets.filter(t => t.source === 'manual').length;
+    } else {
       counts[cat.key] = allTweets.filter(t => t.category === cat.key).length;
     }
   });
@@ -101,25 +120,19 @@ function buildFilterTabs() {
   });
 }
 
-/**
- * 更新计数徽章
- */
 function updateMeta() {
   const countEl = document.getElementById('archive-count');
-  if (countEl) {
-    countEl.textContent = `共 ${allTweets.length} 条推文`;
-  }
+  if (countEl) countEl.textContent = `共 ${allTweets.length} 条推文`;
 }
 
-/**
- * 主渲染 — 生成推文卡片
- */
 function renderTweets() {
   const grid = document.getElementById('tweet-grid');
   if (!grid) return;
 
   let tweets = allTweets;
-  if (currentFilter !== 'all') {
+  if (currentFilter === '手动添加') {
+    tweets = tweets.filter(t => t.source === 'manual');
+  } else if (currentFilter !== 'all') {
     tweets = tweets.filter(t => t.category === currentFilter);
   }
 
@@ -137,26 +150,18 @@ function renderTweets() {
   grid.innerHTML = tweets.map(t => buildTweetCard(t)).join('');
 }
 
-/**
- * 构建单条推文卡片 HTML
- */
 function buildTweetCard(tweet) {
   const date = new Date(tweet.createdAt);
-  const dateStr = date.toLocaleDateString('ja-JP', {
-    year: 'numeric', month: 'short', day: 'numeric'
-  });
-  const timeStr = date.toLocaleTimeString('ja-JP', {
-    hour: '2-digit', minute: '2-digit'
-  });
+  const dateStr = date.toLocaleDateString('ja-JP', { year: 'numeric', month: 'short', day: 'numeric' });
+  const timeStr = date.toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' });
 
-  // 转推标记
-  const retweetBadge = tweet.isRetweet && tweet.retweetSource
-    ? `<div class="tweet-retweet-badge">🔄 转推自 @${escapeHtml(tweet.retweetSource)}</div>`
+  const manualBadge = tweet.source === 'manual'
+    ? `<div class="tweet-manual-badge">✏️ 手动添加</div>`
     : '';
 
   return `
     <div class="card tweet-card">
-      ${retweetBadge}
+      ${manualBadge}
       <div class="tweet-header">
         <div class="tweet-avatar">🫐</div>
         <span class="tweet-user">先斗寧</span>
@@ -176,9 +181,6 @@ function buildTweetCard(tweet) {
     </div>`;
 }
 
-/**
- * 构建推文媒体网格
- */
 function buildMediaGrid(media) {
   const images = media.filter(m => m.type === 'photo');
   if (!images.length) return '';
@@ -187,9 +189,6 @@ function buildMediaGrid(media) {
   </div>`;
 }
 
-/**
- * 将文本中 URL 转为可点击链接
- */
 function linkifyText(text) {
   return text.replace(
     /(https?:\/\/[^\s<]+)/g,
@@ -197,25 +196,112 @@ function linkifyText(text) {
   );
 }
 
-/**
- * 格式化数字（如 12300 → "1.2万"）
- */
 function formatCount(n) {
   if (n >= 10000) return (n / 10000).toFixed(1) + '万';
   if (n >= 1000) return (n / 1000).toFixed(1) + 'k';
   return String(n);
 }
 
-/**
- * HTML 转义
- */
+// ── 手动添加推文 ────────────────────────────────────
+function initManualForm() {
+  // 折叠面板
+  const toggle = document.getElementById('manual-toggle');
+  const body = document.getElementById('manual-body');
+  if (toggle && body) {
+    toggle.addEventListener('click', () => body.classList.toggle('expanded'));
+  }
+
+  const form = document.getElementById('manual-form');
+  if (!form) return;
+
+  // 自动检测分类
+  const textInput = document.getElementById('manual-text');
+  const catSelect = document.getElementById('manual-category');
+
+  if (textInput && catSelect) {
+    textInput.addEventListener('input', () => {
+      const text = textInput.value;
+      if (text.includes('配信') || text.includes('待機') || text.includes('ライブ')) catSelect.value = '直播预告';
+      else if (text.includes('動画') || text.includes('Short') || text.includes('公開')) catSelect.value = '视频和短视频预告';
+      else catSelect.value = '日常推文';
+    });
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const url = document.getElementById('manual-url').value.trim();
+    const text = document.getElementById('manual-text').value.trim();
+    const dateStr = document.getElementById('manual-date').value;
+    const category = document.getElementById('manual-category').value;
+
+    if (!url || !text) {
+      alert('请输入推文链接和正文');
+      return;
+    }
+
+    // 从 URL 提取 ID
+    const idMatch = url.match(/\/status\/(\d+)/);
+    const id = idMatch ? idMatch[1] : 'manual_' + Date.now();
+
+    const tweet = {
+      id,
+      text,
+      createdAt: dateStr ? new Date(dateStr).toISOString() : new Date().toISOString(),
+      category,
+      url,
+      media: [],
+      isRetweet: false,
+      retweetSource: null,
+      likes: 0,
+      retweets: 0,
+      source: 'manual',
+    };
+
+    // 存到 localStorage
+    let manualTweets = [];
+    try { manualTweets = JSON.parse(localStorage.getItem(LS_KEY) || '[]'); } catch {}
+    manualTweets = manualTweets.filter(t => t.id !== id);
+    manualTweets.push(tweet);
+    localStorage.setItem(LS_KEY, JSON.stringify(manualTweets));
+
+    // 清空表单
+    document.getElementById('manual-url').value = '';
+    document.getElementById('manual-text').value = '';
+    document.getElementById('manual-date').value = '';
+
+    // 刷新列表
+    allTweets = allTweets.filter(t => t.id !== id);
+    allTweets.push(tweet);
+    allTweets.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    buildFilterTabs();
+    updateMeta();
+    renderTweets();
+
+    // 滚动到新推文
+    window.scrollTo({ top: document.getElementById('tweet-grid').offsetTop - 100, behavior: 'smooth' });
+  });
+
+  // 导出 localStorage 数据（用于定期同步到 JSON 文件）
+  const exportBtn = document.getElementById('manual-export');
+  if (exportBtn) {
+    exportBtn.addEventListener('click', () => {
+      const manualTweets = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
+      if (!manualTweets.length) {
+        alert('暂无手动添加的推文');
+        return;
+      }
+      const json = JSON.stringify(manualTweets, null, 2);
+      navigator.clipboard.writeText(json).then(() => {
+        alert('已复制 ' + manualTweets.length + ' 条手动推文到剪贴板！\n\n发给我即可同步到网站。');
+      }).catch(() => {
+        alert('复制失败，请手动复制：\n\n' + json);
+      });
+    });
+  }
+}
+
 function escapeHtml(str) {
-  const map = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#039;',
-  };
+  const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
   return String(str).replace(/[&<>"']/g, c => map[c]);
 }
