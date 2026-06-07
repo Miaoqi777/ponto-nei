@@ -4,7 +4,7 @@
  * 输出: data/tweets.json
  */
 
-import { writeFileSync, mkdirSync, existsSync } from 'node:fs';
+import { writeFileSync, mkdirSync, existsSync, readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -113,11 +113,44 @@ async function main() {
     return;
   }
 
-  // 过滤转推（RT @ 开头）
-  tweets = tweets.filter(t => !t.text.startsWith('RT @'));
+  // 读取现有数据（用于累积）
+  let existingTweets = [];
+  if (existsSync(OUTPUT_PATH)) {
+    try {
+      const existing = JSON.parse(readFileSync(OUTPUT_PATH, 'utf-8'));
+      existingTweets = existing.tweets || [];
+    } catch {}
+  }
+
+  // 合并：新推文 + 旧推文，按 ID 去重
+  const seen = new Set();
+  let merged = [];
+
+  // 新推文优先
+  for (const t of tweets) {
+    if (!seen.has(t.id)) {
+      seen.add(t.id);
+      merged.push(t);
+    }
+  }
+  // 旧推文补充
+  for (const t of existingTweets) {
+    if (!seen.has(t.id)) {
+      seen.add(t.id);
+      merged.push(t);
+    }
+  }
+
+  // 按时间倒序排列
+  merged.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+  console.log('  现有: ' + existingTweets.length + ' 条 → 合并后: ' + merged.length + ' 条');
+
+  // 过滤转推
+  merged = merged.filter(t => !t.text.startsWith('RT @'));
 
   // 分类
-  const classified = tweets.map(t => ({
+  const classified = merged.map(t => ({
     id: t.id,
     text: t.text,
     createdAt: t.createdAt,
