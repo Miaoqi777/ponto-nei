@@ -154,32 +154,58 @@ async function tryHtmlScrape(username) {
   });
   const html = await resp.text();
 
-  // 方案 C1：解析 __INITIAL_STATE__
-  const initMatch = html.match(/window\.__INITIAL_STATE__\s*=\s*({[\s\S]*?});\s*<\/script>/);
-  if (initMatch) {
-    try {
-      const initData = JSON.parse(initMatch[1]);
-      DEBUG_LOG.push('Found __INITIAL_STATE__, keys: ' + Object.keys(initData).join(', '));
-      const tweets = extractTweetsFromInitState(initData);
-      if (tweets.length > 0) {
-        DEBUG_LOG.push('Extracted ' + tweets.length + ' tweets from __INITIAL_STATE__');
-        return tweets;
+  // 方案 C1：解析 __INITIAL_STATE__（用括号计数精确提取）
+  const initStart = html.indexOf('window.__INITIAL_STATE__');
+  if (initStart !== -1) {
+    // 找到第一个 { 开始位置
+    const jsonStart = html.indexOf('{', initStart);
+    if (jsonStart !== -1) {
+      // 括号计数找到匹配的 }
+      let depth = 0, i = jsonStart;
+      for (; i < html.length; i++) {
+        const ch = html[i];
+        if (ch === '{') depth++;
+        else if (ch === '}') { depth--; if (depth === 0) break; }
+        else if (ch === '"') {
+          // 跳过字符串内容（处理转义）
+          i++;
+          while (i < html.length) {
+            if (html[i] === '\\') { i += 2; continue; }
+            if (html[i] === '"') break;
+            i++;
+          }
+        }
       }
-    } catch (e) {
-      DEBUG_LOG.push('__INITIAL_STATE__ parse fail: ' + e.message);
+      if (depth === 0 && i < html.length) {
+        const jsonStr = html.slice(jsonStart, i + 1);
+        DEBUG_LOG.push('__INITIAL_STATE__ JSON length: ' + jsonStr.length);
+        try {
+          const initData = JSON.parse(jsonStr);
+          DEBUG_LOG.push('Parsed OK, keys: ' + Object.keys(initData).join(', '));
+          const tweets = extractTweetsFromInitState(initData);
+          if (tweets.length > 0) {
+            DEBUG_LOG.push('Extracted ' + tweets.length + ' tweets');
+            return tweets;
+          }
+        } catch (e) {
+          DEBUG_LOG.push('__INITIAL_STATE__ parse fail: ' + e.message);
+        }
+      } else {
+        DEBUG_LOG.push('__INITIAL_STATE__ brace matching failed, depth=' + depth);
+      }
     }
-  } else {
-    // 方案 C2：__NEXT_DATA__
-    const nextMatch = html.match(/<script[^>]*id="__NEXT_DATA__"[^>]*type="application\/json"[^>]*>([\s\S]*?)<\/script>/);
-    if (nextMatch) {
-      try {
-        const data = JSON.parse(nextMatch[1]);
-        DEBUG_LOG.push('Found __NEXT_DATA__');
-        const tweets = extractTweetsFromInitState(data);
-        if (tweets.length > 0) return tweets;
-      } catch (e) {
-        DEBUG_LOG.push('__NEXT_DATA__ parse fail: ' + e.message);
-      }
+  }
+
+  // 方案 C2：__NEXT_DATA__
+  const nextMatch = html.match(/<script[^>]*id="__NEXT_DATA__"[^>]*type="application\/json"[^>]*>([\s\S]*?)<\/script>/);
+  if (nextMatch) {
+    try {
+      const data = JSON.parse(nextMatch[1]);
+      DEBUG_LOG.push('Found __NEXT_DATA__');
+      const tweets = extractTweetsFromInitState(data);
+      if (tweets.length > 0) return tweets;
+    } catch (e) {
+      DEBUG_LOG.push('__NEXT_DATA__ parse fail: ' + e.message);
     }
   }
 
