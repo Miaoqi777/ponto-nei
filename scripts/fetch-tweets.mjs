@@ -154,51 +154,91 @@ async function tryHtmlScrape(username) {
   });
   const html = await resp.text();
 
-  // 查找 __NEXT_DATA__ script 标签
-  const nextDataMatch = html.match(/<script[^>]*id="__NEXT_DATA__"[^>]*type="application\/json"[^>]*>([\s\S]*?)<\/script>/);
-  if (nextDataMatch) {
+  // 方案 C1：解析 __INITIAL_STATE__
+  const initMatch = html.match(/window\.__INITIAL_STATE__\s*=\s*({[\s\S]*?});\s*<\/script>/);
+  if (initMatch) {
     try {
-      const data = JSON.parse(nextDataMatch[1]);
-      DEBUG_LOG.push('Found __NEXT_DATA__');
-      const tweets = extractTweetsFromNextData(data);
-      if (tweets.length > 0) return tweets;
+      const initData = JSON.parse(initMatch[1]);
+      DEBUG_LOG.push('Found __INITIAL_STATE__, keys: ' + Object.keys(initData).join(', '));
+      const tweets = extractTweetsFromInitState(initData);
+      if (tweets.length > 0) {
+        DEBUG_LOG.push('Extracted ' + tweets.length + ' tweets from __INITIAL_STATE__');
+        return tweets;
+      }
     } catch (e) {
-      DEBUG_LOG.push('__NEXT_DATA__ parse fail: ' + e.message);
+      DEBUG_LOG.push('__INITIAL_STATE__ parse fail: ' + e.message);
+    }
+  } else {
+    // 方案 C2：__NEXT_DATA__
+    const nextMatch = html.match(/<script[^>]*id="__NEXT_DATA__"[^>]*type="application\/json"[^>]*>([\s\S]*?)<\/script>/);
+    if (nextMatch) {
+      try {
+        const data = JSON.parse(nextMatch[1]);
+        DEBUG_LOG.push('Found __NEXT_DATA__');
+        const tweets = extractTweetsFromInitState(data);
+        if (tweets.length > 0) return tweets;
+      } catch (e) {
+        DEBUG_LOG.push('__NEXT_DATA__ parse fail: ' + e.message);
+      }
     }
   }
 
-  // 查找任何包含 tweet 数据的 script
-  const scripts = html.match(/<script[^>]*>([\s\S]*?)<\/script>/g) || [];
-  for (const script of scripts) {
-    if (script.includes('"tweet"') || script.includes('"tweets"')) {
-      DEBUG_LOG.push('Found tweet script: ' + script.slice(0, 200));
-    }
-  }
-
+  DEBUG_LOG.push('No tweet data found in HTML');
   return [];
 }
 
-function extractTweetsFromNextData(data) {
-  // 遍历查找 tweets
+function extractTweetsFromInitState(state) {
   const tweets = [];
-  function search(obj) {
-    if (!obj || typeof obj !== 'object') return;
-    if (obj.tweet && obj.tweet.legacy?.full_text) {
-      const t = obj.tweet;
-      tweets.push({
-        id: t.rest_id || t.legacy?.id_str || '',
-        text: t.legacy?.full_text || '',
-        createdAt: t.legacy?.created_at || '',
-        likes: t.legacy?.favorite_count || 0,
-        retweets: t.legacy?.retweet_count || 0,
-        media: [],
-        isRetweet: false,
-        retweetSource: null,
-      });
+  const seen = new Set();
+
+  // 递归搜索所有包含 legacy.full_text 的对象
+  function search(obj, depth) {
+    if (!obj || typeof obj !== 'object' || depth > 20) return;
+    if (Array.isArray(obj)) {
+      for (const item of obj) search(item, depth + 1);
+      return;
     }
-    for (const v of Object.values(obj)) search(v);
+    // 推文特征：有 legacy.full_text
+    if (obj.legacy?.full_text && obj.rest_id) {
+      const id = obj.rest_id;
+      if (!seen.has(id)) {
+        seen.add(id);
+        tweets.push({
+          id,
+          text: obj.legacy.full_text,
+          createdAt: obj.legacy.created_at || '',
+          likes: obj.legacy.favorite_count || 0,
+          retweets: obj.legacy.retweet_count || 0,
+          media: [],
+          isRetweet: !!(obj.legacy.retweeted_status_result),
+          retweetSource: obj.legacy.retweeted_status_result?.result?.core?.user_results?.result?.legacy?.screen_name || null,
+        });
+      }
+      return;
+    }
+    // 扁平化的推文：直接在 full_text 旁
+    if (obj.full_text && obj.id_str && obj.user_id_str) {
+      const id = obj.id_str;
+      if (!seen.has(id)) {
+        seen.add(id);
+        tweets.push({
+          id,
+          text: obj.full_text,
+          createdAt: obj.created_at || '',
+          likes: obj.favorite_count || 0,
+          retweets: obj.retweet_count || 0,
+          media: [],
+          isRetweet: false,
+          retweetSource: null,
+        });
+      }
+      return;
+    }
+    for (const v of Object.values(obj)) search(v, depth + 1);
   }
-  search(data);
+
+  search(state, 0);
+  DEBUG_LOG.push('Searched state, found ' + tweets.length + ' unique tweets');
   return tweets.slice(0, MAX_TWEETS);
 }
 
