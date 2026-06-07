@@ -17,7 +17,8 @@ let currentFilter = 'all';
 
 // 高级搜索状态
 const searchState = {
-  categories: [],     // 选中的分类，空=全部
+  categories: [],     // 选中的大分类，空=全部
+  series: [],         // 选中的系列，空=全部
   keyword: '',        // 标题关键词
   dateType: 'all',    // all | exact | year | yearMonth
   dateExact: '',      // YYYY-MM-DD
@@ -212,6 +213,11 @@ function applySearch(videos) {
     videos = videos.filter(v => searchState.categories.includes(v.category));
   }
 
+  // 系列过滤（多选）
+  if (searchState.series.length > 0) {
+    videos = videos.filter(v => v.series && searchState.series.includes(v.series));
+  }
+
   // 关键词过滤
   if (searchState.keyword.trim()) {
     const kw = searchState.keyword.trim().toLowerCase();
@@ -270,6 +276,30 @@ function initSearchPanel() {
         searchState.categories = [];
         catsDiv.querySelectorAll('input[type="checkbox"]:checked').forEach(c => {
           searchState.categories.push(c.value);
+        });
+        onSearchChange();
+      });
+    });
+  }
+
+  // 渲染系列多选 checkbox（从数据中提取）
+  const seriesDiv = document.getElementById('search-series');
+  if (seriesDiv) {
+    const seriesSet = new Set();
+    allVideos.forEach(v => { if (v.series) seriesSet.add(v.series); });
+    const seriesList = Array.from(seriesSet).sort();
+    seriesDiv.innerHTML = seriesList.map(s => `
+      <label class="search-cat-checkbox">
+        <input type="checkbox" value="${escapeHtml(s)}">
+        <span>${escapeHtml(s)}</span>
+      </label>
+    `).join('');
+
+    seriesDiv.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+      cb.addEventListener('change', () => {
+        searchState.series = [];
+        seriesDiv.querySelectorAll('input[type="checkbox"]:checked').forEach(c => {
+          searchState.series.push(c.value);
         });
         onSearchChange();
       });
@@ -393,6 +423,7 @@ function updateSearchBadge() {
 
   const hasSearch = searchState.keyword.trim() ||
     searchState.categories.length > 0 ||
+    searchState.series.length > 0 ||
     searchState.dateType !== 'all';
 
   if (hasSearch) {
@@ -409,6 +440,7 @@ function updateSearchBadge() {
  */
 function clearSearch() {
   searchState.categories = [];
+  searchState.series = [];
   searchState.keyword = '';
   searchState.dateType = 'all';
   searchState.dateExact = '';
@@ -419,6 +451,10 @@ function clearSearch() {
   const catsDiv = document.getElementById('search-cats');
   if (catsDiv) {
     catsDiv.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+  }
+  const seriesDiv = document.getElementById('search-series');
+  if (seriesDiv) {
+    seriesDiv.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
   }
   const kwInput = document.getElementById('search-keyword');
   if (kwInput) kwInput.value = '';
