@@ -1598,6 +1598,18 @@ body.is-noscroll {
 	   推文卡片
 	   ============================================ */
 
+	/* ── X 官方时间线嵌入 ── */
+	.twitter-embed-wrapper {
+	  max-width: 700px;
+	  margin: 0 auto;
+	  padding: 1.5rem 2rem 4rem;
+	}
+	.twitter-embed-wrapper .twitter-timeline {
+	  border-radius: 12px;
+	  overflow: hidden;
+	  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+	}
+
 	.tweet-grid {
 	  display: flex;
 	  flex-direction: column;
