@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-07T17:38:04.135Z",
+  "lastUpdated": "2026-06-07T17:39:57.203Z",
   "username": "ponto_nei",
   "displayName": "先斗寧",
   "tweets": [
@@ -101,9 +101,14 @@
     }
   ],
   "_debug": [
-    "HTTP 403 https://api.x.com/1.1/guest/activate.json: {\"code\":200,\"message\":\"Forbidden.\"}",
-    "Profile HTML: <!DOCTYPE html><html dir=\"ltr\" lang=\"en\"><head><meta charset=\"utf-8\" /><meta name=\"viewport\" content=\"width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover\" /><link rel=\"preconnect\" href=\"//abs.twimg.com\" /><link rel=\"preconnect\" href=\"//api.x.com\" /><link rel=\"preconnect\" href=\"//pbs.twimg.com\" /><link rel=\"preload\" as=\"font\" type=\"font/woff2\" crossorigin fetchpriority=\"high\" href=\"https://abs.twimg.com/responsive-web/client-web/Chirp-Regular.80fda27a.woff2\" /><l",
-    "HTML fallback data keys: optimist, entities, featureSwitch, settings, devices, session, snoozedTags, developer",
+    "Try Nitter: https://nitter.poast.org/ponto_nei/rss",
+    "Try Nitter: https://xcancel.com/ponto_nei/rss",
+    "Try Nitter: https://nitter.net/ponto_nei/rss",
+    "Nitter RSS: ",
+    "Try fxtwitter: https://api.fxtwitter.com/user/ponto_nei",
+    "fxtwitter fail: HTTP 404",
+    "Try HTML scrape: https://x.com/ponto_nei",
+    "Found tweet script: <script type=\"text/javascript\" charset=\"utf-8\" nonce=\"OWQ1MjcxMzEtYmJiNi00ZDc4LTk3MjItNjQ0NDJlODE4ZGZh\">window.__INITIAL_STATE__={\"optimist\":[],\"entities\":{\"broadcasts\":{\"entities\":{},\"errors\":{},\"fet",
     "keepExisting: 所有渠道均无推文返回"
   ]
 }
