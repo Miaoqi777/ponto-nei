@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-07T17:08:39.876Z",
+  "lastUpdated": "2026-06-07T17:12:41.444Z",
   "username": "ponto_nei",
   "displayName": "先斗寧",
   "tweets": [
@@ -99,5 +99,11 @@
       "likes": 11200,
       "retweets": 567
     }
+  ],
+  "_debug": [
+    "GET https://api.x.com/2/users/by/username/ponto_nei",
+    "Token (first 20): AAAAAAAAAAAAAAAAAAAA...",
+    "HTTP 401: {\n  \"title\": \"Unauthorized\",\n  \"type\": \"about:blank\",\n  \"status\": 401,\n  \"detail\": \"Unauthorized\"\n}",
+    "keepExisting: 用户查询失败"
   ]
 }
