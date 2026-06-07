@@ -42,17 +42,20 @@
         <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
       </div>
 
-      <!-- X 官方时间线嵌入 -->
-      <div class="twitter-embed-wrapper">
-        <a class="twitter-timeline"
-           href="https://x.com/ponto_nei"
-           data-theme="light"
-           data-height="800"
-           data-chrome="nofooter noborders transparent"
-           data-lang="ja"
-           data-dnt="true">
-          @ponto_nei のポストを読み込み中...
-        </a>
+      <!-- 分类过滤标签 -->
+      <div id="filter-bar" class="filter-bar">
+        <!-- JS 动态渲染 -->
+      </div>
+
+      <!-- 元信息栏 -->
+      <div class="archive-meta">
+        <span class="updated" id="archive-updated">最終更新: 読み込み中...</span>
+        <span class="count-badge" id="archive-count">共 0 条推文</span>
+      </div>
+
+      <!-- 推文卡片列表 -->
+      <div id="tweet-grid" class="tweet-grid">
+        <!-- JS 动态渲染 -->
       </div>
     </section>
   </div>
@@ -68,8 +71,7 @@
     </p>
   </footer>
 
-  <!-- X 官方时间线嵌入 -->
-  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+  <script src="js/tweets.js"></script>
 
   <!-- ========== 加载动画控制 ========== -->
   <script>
