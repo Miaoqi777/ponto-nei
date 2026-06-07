@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-07T17:19:23.275Z",
+  "lastUpdated": "2026-06-07T17:38:04.135Z",
   "username": "ponto_nei",
   "displayName": "先斗寧",
   "tweets": [
@@ -101,9 +101,9 @@
     }
   ],
   "_debug": [
-    "GET https://api.x.com/2/users/by/username/ponto_nei",
-    "Token (first 20): AAAAAAAAAAAAAAAAAAAA...",
-    "HTTP 402: {\"account_id\":2063666515086315521,\"title\":\"CreditsDepleted\",\"detail\":\"Your enrolled account [2063666515086315521] does not have any credits to fulfill this request.\",\"type\":\"https://api.twitter.com/2/problems/credits\"}",
-    "keepExisting: 用户查询失败"
+    "HTTP 403 https://api.x.com/1.1/guest/activate.json: {\"code\":200,\"message\":\"Forbidden.\"}",
+    "Profile HTML: <!DOCTYPE html><html dir=\"ltr\" lang=\"en\"><head><meta charset=\"utf-8\" /><meta name=\"viewport\" content=\"width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover\" /><link rel=\"preconnect\" href=\"//abs.twimg.com\" /><link rel=\"preconnect\" href=\"//api.x.com\" /><link rel=\"preconnect\" href=\"//pbs.twimg.com\" /><link rel=\"preload\" as=\"font\" type=\"font/woff2\" crossorigin fetchpriority=\"high\" href=\"https://abs.twimg.com/responsive-web/client-web/Chirp-Regular.80fda27a.woff2\" /><l",
+    "HTML fallback data keys: optimist, entities, featureSwitch, settings, devices, session, snoozedTags, developer",
+    "keepExisting: 所有渠道均无推文返回"
   ]
 }
