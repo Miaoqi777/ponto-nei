@@ -22,9 +22,7 @@ const API_BASE = 'https://api.x.com/2';
 // X API v2 免费限制: 每月100次 GET，每天跑一次消耗2次(ponto_nei)
 const MAX_RESULTS = 100; // 每次最多100条，免费套餐够用
 
-// Bearer Token（支持 URL 编码的 token）
-const RAW_TOKEN = process.env.X_BEARER_TOKEN || '';
-const BEARER_TOKEN = decodeURIComponent(RAW_TOKEN);
+const BEARER_TOKEN = process.env.X_BEARER_TOKEN || '';
 
 // 调试信息
 let DEBUG_LOG = [];
