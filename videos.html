@@ -47,40 +47,39 @@
         <!-- JS 动态渲染 -->
       </div>
 
-      <!-- 高级搜索面板 -->
-      <div class="search-panel" id="search-panel">
-        <button class="search-toggle" id="search-toggle">🔍 高级搜索</button>
-        <div class="search-body" id="search-body">
-          <div class="search-row">
-            <span class="search-label">分类：</span>
-            <div class="search-cats" id="search-cats">
-              <!-- JS 动态渲染 -->
-            </div>
-          </div>
-          <div class="search-row">
-            <label class="search-label" for="search-keyword">关键词：</label>
-            <input type="text" class="search-input" id="search-keyword" placeholder="输入视频标题关键词...">
-          </div>
-          <div class="search-row">
-            <span class="search-label">日期：</span>
-            <div class="search-date-options" id="search-date-options">
-              <label><input type="radio" name="dateType" value="all" checked> 全部</label>
-              <label><input type="radio" name="dateType" value="exact"> 具体日期</label>
-              <label><input type="radio" name="dateType" value="year"> 按年</label>
-              <label><input type="radio" name="dateType" value="yearMonth"> 按年月</label>
-            </div>
-            <div class="search-date-inputs" id="search-date-inputs">
-              <!-- 根据选择动态显示 -->
-            </div>
-          </div>
-          <button class="search-clear" id="search-clear">✕ 清除搜索</button>
-        </div>
-      </div>
-
-      <!-- 元信息栏 -->
+      <!-- 元信息栏 + 搜索入口 -->
       <div class="archive-meta">
         <span class="updated" id="archive-updated">最終更新: 読み込み中...</span>
+        <span class="meta-spacer"></span>
+        <button class="search-toggle" id="search-toggle">🔍 搜索</button>
         <span class="count-badge" id="archive-count">共 0 个视频</span>
+      </div>
+
+      <!-- 高级搜索面板 -->
+      <div class="search-body" id="search-body">
+        <div class="search-row">
+          <span class="search-label">分类</span>
+          <div class="search-cats" id="search-cats">
+            <!-- JS 动态渲染 -->
+          </div>
+        </div>
+        <div class="search-row">
+          <label class="search-label" for="search-keyword">关键词</label>
+          <input type="text" class="search-input" id="search-keyword" placeholder="输入视频标题关键词...">
+        </div>
+        <div class="search-row">
+          <span class="search-label">日期</span>
+          <div class="search-date-options" id="search-date-options">
+            <label><input type="radio" name="dateType" value="all" checked> 全部</label>
+            <label><input type="radio" name="dateType" value="exact"> 具体日期</label>
+            <label><input type="radio" name="dateType" value="year"> 按年</label>
+            <label><input type="radio" name="dateType" value="yearMonth"> 按年月</label>
+          </div>
+          <div class="search-date-inputs" id="search-date-inputs">
+            <!-- 根据选择动态显示 -->
+          </div>
+        </div>
+        <button class="search-clear" id="search-clear">✕ 清除搜索</button>
       </div>
 
       <!-- 视频卡片网格 -->

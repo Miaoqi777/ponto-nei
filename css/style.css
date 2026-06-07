@@ -1804,51 +1804,45 @@ body.is-noscroll {
    高级搜索面板
    ============================================ */
 
-.search-panel {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0.8rem 2rem;
+/* meta 栏留白，把搜索入口推到右侧 */
+.archive-meta .meta-spacer {
+  flex: 1;
 }
 
+/* 搜索切换 — 融于 meta 栏的轻量文字链接 */
 .search-toggle {
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
-  padding: 0.45rem 1.2rem;
-  border-radius: 50px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  background: var(--bg);
-  color: var(--text-secondary);
-  font-size: 0.82rem;
+  gap: 0.25rem;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  font-size: 0.8rem;
   font-weight: 500;
   cursor: pointer;
   font-family: var(--font-jp);
-  transition: var(--transition);
+  transition: color 0.2s ease;
   user-select: none;
 }
 
 .search-toggle:hover {
-  border-color: var(--primary-light);
-  color: var(--primary);
-}
-
-.search-toggle.active {
-  border-color: var(--accent);
   color: var(--accent);
 }
 
 .search-toggle.has-filter {
-  border-color: var(--accent);
-  color: #fff;
-  background: var(--accent);
+  color: var(--accent);
+  font-weight: 600;
 }
 
+/* 搜索面板本体 — meta 栏下方 */
 .search-body {
   display: none;
-  margin-top: 0.8rem;
+  max-width: 1100px;
+  margin: 0.5rem auto 0;
   padding: 1.2rem 1.5rem;
   background: var(--bg);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.06);
   border-radius: var(--radius);
 }
 
@@ -1869,12 +1863,12 @@ body.is-noscroll {
 }
 
 .search-label {
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 600;
-  color: var(--text);
+  color: var(--text-muted);
   white-space: nowrap;
   padding-top: 0.35rem;
-  min-width: 3.5rem;
+  min-width: 3rem;
 }
 
 .search-cats {
@@ -1894,12 +1888,12 @@ body.is-noscroll {
 
 .search-cat-checkbox span {
   display: inline-block;
-  padding: 0.35rem 0.9rem;
+  padding: 0.3rem 0.8rem;
   border-radius: 50px;
   border: 1px solid rgba(0, 0, 0, 0.1);
   background: var(--bg);
   color: var(--text-secondary);
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 500;
   transition: var(--transition);
 }
@@ -1918,20 +1912,20 @@ body.is-noscroll {
 .search-input {
   flex: 1;
   min-width: 200px;
-  padding: 0.4rem 0.8rem;
-  border: 1px solid rgba(0, 0, 0, 0.12);
+  padding: 0.35rem 0.7rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 6px;
-  font-size: 0.85rem;
+  font-size: 0.84rem;
   font-family: var(--font-jp);
   color: var(--text);
-  background: var(--bg);
+  background: var(--bg-secondary);
   transition: var(--transition);
   outline: none;
 }
 
 .search-input:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.08);
+  background: var(--bg);
 }
 
 .search-input::placeholder {
@@ -1967,13 +1961,13 @@ body.is-noscroll {
 
 .search-date-select,
 .search-date-input {
-  padding: 0.4rem 0.8rem;
-  border: 1px solid rgba(0, 0, 0, 0.12);
+  padding: 0.35rem 0.7rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 6px;
-  font-size: 0.85rem;
+  font-size: 0.84rem;
   font-family: var(--font-jp);
   color: var(--text);
-  background: var(--bg);
+  background: var(--bg-secondary);
   outline: none;
   transition: var(--transition);
 }
@@ -1981,18 +1975,18 @@ body.is-noscroll {
 .search-date-select:focus,
 .search-date-input:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.08);
+  background: var(--bg);
 }
 
 .search-clear {
   display: inline-flex;
   align-items: center;
   gap: 0.2rem;
-  padding: 0.35rem 0.8rem;
+  padding: 0.3rem 0.6rem;
   border: none;
   background: none;
   color: var(--text-muted);
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   cursor: pointer;
   font-family: var(--font-jp);
   transition: color 0.2s ease;
@@ -2004,10 +1998,8 @@ body.is-noscroll {
 
 /* --- 搜索面板响应式 --- */
 @media (max-width: 768px) {
-  .search-panel {
-    padding: 0.5rem 1.2rem;
-  }
   .search-body {
+    margin: 0.5rem 1.2rem 0;
     padding: 1rem 1rem;
   }
   .search-row {

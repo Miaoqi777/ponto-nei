@@ -305,8 +305,7 @@ function initSearchPanel() {
   const body = document.getElementById('search-body');
   if (toggle && body) {
     toggle.addEventListener('click', () => {
-      const expanded = body.classList.toggle('expanded');
-      toggle.classList.toggle('active', expanded);
+      body.classList.toggle('expanded');
     });
   }
 
