@@ -13,11 +13,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## 文件架构
 
 ```
-├── index.html           # 角色介绍主页
-├── collection.html      # 商品图鉴管理页（表单 + 卡片网格）
-├── css/style.css        # 全局样式（白底日系，CSS 变量驱动）
-├── js/main.js           # 主页：加载动画、导航、粒子、滚动入场动画
-├── js/collection.js     # 图鉴页：localStorage CRUD、图片 Base64、搜索排序
+├── index.html                  # 角色介绍主页
+├── collection.html             # 商品图鉴管理页（表单 + 卡片网格）
+├── videos.html                 # YouTube 视频档案页（分类 + 系列分组）
+├── tweets.html                 # Twitter/X 推文整理页（分类过滤）
+├── css/style.css               # 全局样式（白底日系，CSS 变量驱动）
+├── js/main.js                  # 主页：加载动画、导航、粒子、滚动入场动画
+├── js/collection.js            # 图鉴页：localStorage CRUD、图片 Base64、搜索排序
+├── js/videos.js                # 视频档案：JSON加载、分类过滤、系列分组、卡片渲染
+├── js/tweets.js                # 推文整理：JSON加载、分类过滤、卡片渲染
+├── data/videos.json            # 视频静态数据（YouTube API → JSON）
+├── data/tweets.json            # 推文静态数据（Twitter syndication → JSON）
+├── scripts/fetch-videos.mjs    # Node.js：YouTube Data API v3 → videos.json
+├── scripts/fetch-tweets.mjs    # Node.js：Twitter syndication → tweets.json
+├── .github/workflows/          # GitHub Actions 每日自动刷新
+│   └── refresh-data.yml
 └── .gitignore
 ```
 
@@ -49,8 +59,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```bash
 # 本地预览：直接用浏览器打开 index.html
 
-# 部署到 GitHub Pages
-git add . && git commit -m "更新描述" && git push github main
+
 ```
 
 ## 已配置的 remote
@@ -64,6 +73,24 @@ git add . && git commit -m "更新描述" && git push github main
 
 ### collection.html
 `navbar` → `.form-section`（图片上传 + 表单字段 + btn-arrow 提交）→ `.collection-controls`（搜索 + 排序 + 计数）→ `.collection-grid`（JS 动态渲染卡片）→ `footer`
+
+### videos.html
+`navbar` → `.archive-page` → `.section` → `.filter-bar`（分类标签 + 计数）→ `.archive-meta`（更新时间 + 视频计数）→ `.video-grid`（按系列分组的视频卡片，含缩略图、时长、分类角标）→ `footer`
+
+### tweets.html
+`navbar` → `.archive-page` → `.section` → `.filter-bar`（分类标签 + 计数）→ `.archive-meta`（更新时间 + 推文计数）→ `.tweet-grid`（推文卡片：头像 + 用户名 + 正文 + 媒体 + 互动数据）→ `footer`
+
+## 数据更新
+
+```bash
+# 拉取最新 YouTube 视频数据（需要 YOUTUBE_API_KEY 环境变量）
+node scripts/fetch-videos.mjs
+
+# 拉取最新 Twitter 推文数据（无需 API key）
+node scripts/fetch-tweets.mjs
+```
+
+GitHub Actions 每日 UTC 3:27 自动刷新 data/*.json 并提交。
 
 ## 按钮体系
 - `.btn-arrow`：主按钮（黑→紫渐变 + 竖线 + 箭头，参考 NIJISANJI 官方样式）

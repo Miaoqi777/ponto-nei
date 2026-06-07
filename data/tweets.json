@@ -1,0 +1,103 @@
+{
+  "lastUpdated": "2026-06-07T00:00:00Z",
+  "username": "ponto_nei",
+  "displayName": "先斗寧",
+  "tweets": [
+    {
+      "id": "tweet1",
+      "text": "今夜22時から配信です！🎮\nゼルダの伝説 知恵のかりもの、ついにクライマックス！\nぜひ遊びに来てね🫐\n\n#先斗寧 #にじさんじ #NintendoSwitch",
+      "createdAt": "2026-06-07T12:00:00Z",
+      "category": "直播预告",
+      "url": "https://x.com/ponto_nei/status/tweet1",
+      "media": [],
+      "isRetweet": false,
+      "retweetSource": null,
+      "likes": 2340,
+      "retweets": 156
+    },
+    {
+      "id": "tweet2",
+      "text": "RT @amagamemuyu: 明日のコラボ配信、先斗寧ちゃんとマインクラフトで遊びます！🏠✨\n楽しみ〜！\n\n#にじさんじ #先斗寧",
+      "createdAt": "2026-06-06T18:00:00Z",
+      "category": "转发直播联动",
+      "url": "https://x.com/ponto_nei/status/tweet2",
+      "media": [],
+      "isRetweet": true,
+      "retweetSource": "amagamemuyu",
+      "likes": 3450,
+      "retweets": 289
+    },
+    {
+      "id": "tweet3",
+      "text": "新しい歌ってみた動画、もうすぐ公開です🎵\n今回はあの憧れの曲をカバーさせていただきました...！\nお楽しみに🫐✨\n\n#先斗寧 #歌ってみた #にじさんじ",
+      "createdAt": "2026-06-06T10:30:00Z",
+      "category": "视频和短视频预告",
+      "url": "https://x.com/ponto_nei/status/tweet3",
+      "media": [],
+      "isRetweet": false,
+      "retweetSource": null,
+      "likes": 5670,
+      "retweets": 412
+    },
+    {
+      "id": "tweet4",
+      "text": "今日も一日おつかれさまでした🫐\nコンビニで新しいスイーツ見つけた！\n食べたことある人いる？😋\n\n#先斗寧",
+      "createdAt": "2026-06-05T21:00:00Z",
+      "category": "日常推文",
+      "url": "https://x.com/ponto_nei/status/tweet4",
+      "media": [],
+      "isRetweet": false,
+      "retweetSource": null,
+      "likes": 8900,
+      "retweets": 234
+    },
+    {
+      "id": "tweet5",
+      "text": "RT @nijisanji_app: 【お知らせ】\nRanunculus 3周年記念グッズの受注販売がスタート🛍️\n先斗寧ちゃんの描き下ろしイラストを使用したアクリルスタンドなど全5種！\n\n受注期間：6/20まで\n\n#にじさんじ #先斗寧",
+      "createdAt": "2026-06-05T15:00:00Z",
+      "category": "转发直播联动",
+      "url": "https://x.com/ponto_nei/status/tweet5",
+      "media": [],
+      "isRetweet": true,
+      "retweetSource": "nijisanji_app",
+      "likes": 12300,
+      "retweets": 1560
+    },
+    {
+      "id": "tweet6",
+      "text": "明日の20時から！🫐\n新作ホラーゲームに挑戦します！！\nちゃんと最後までクリアできるかな...💦\n\nみんな応援に来てね👻\n\n#先斗寧 #にじさんじ #ホラーゲーム",
+      "createdAt": "2026-06-04T19:00:00Z",
+      "category": "直播预告",
+      "url": "https://x.com/ponto_nei/status/tweet6",
+      "media": [],
+      "isRetweet": false,
+      "retweetSource": null,
+      "likes": 6780,
+      "retweets": 345
+    },
+    {
+      "id": "tweet7",
+      "text": "新作Shortアップしました！⚡\n関西弁で早口言葉に挑戦したら...\nまさかの結果に😂\n\nぜひ見てね！\nhttps://youtube.com/shorts/xxxx\n\n#先斗寧 #Shorts #にじさんじ",
+      "createdAt": "2026-06-03T16:00:00Z",
+      "category": "视频和短视频预告",
+      "url": "https://x.com/ponto_nei/status/tweet7",
+      "media": [],
+      "isRetweet": false,
+      "retweetSource": null,
+      "likes": 4500,
+      "retweets": 198
+    },
+    {
+      "id": "tweet8",
+      "text": "最近ハマってることは朝にブルーベリースムージーを作ること🫐\n冷凍ブルーベリーとバナナとヨーグルトを混ぜるだけ！\nめっちゃ美味しいからみんなもやってみてね✨\n\n#先斗寧 #日常",
+      "createdAt": "2026-06-02T08:30:00Z",
+      "category": "日常推文",
+      "url": "https://x.com/ponto_nei/status/tweet8",
+      "media": [],
+      "isRetweet": false,
+      "retweetSource": null,
+      "likes": 11200,
+      "retweets": 567
+    }
+  ]
+}

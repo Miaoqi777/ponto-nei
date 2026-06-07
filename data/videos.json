@@ -1,0 +1,111 @@
+{
+  "lastUpdated": "2026-06-07T00:00:00Z",
+  "channelId": "UCXuqSBlHAE6Xw-yeJA0Tunw",
+  "channelTitle": "Ponto Nei Ch. 先斗寧",
+  "videos": [
+    {
+      "id": "sample1",
+      "title": "【Minecraft】みんなで建築！夏の別荘を作ろう🏠【先斗寧／にじさんじ】",
+      "thumbnail": "https://via.placeholder.com/640x360/5A7DFF/ffffff?text=Minecraft+Stream",
+      "publishedAt": "2026-06-01T12:00:00Z",
+      "durationDisplay": "3:25:10",
+      "category": "录播",
+      "series": "Minecraft",
+      "url": "https://www.youtube.com/watch?v=sample1",
+      "isShort": false,
+      "isCollaboration": false,
+      "collaborators": []
+    },
+    {
+      "id": "sample2",
+      "title": "【塞尔达传说：王国之泪】#12 いよいよラスボス戦！【先斗寧／にじさんじ】",
+      "thumbnail": "https://via.placeholder.com/640x360/8B5CF6/ffffff?text=Zelda+Stream",
+      "publishedAt": "2026-05-28T10:00:00Z",
+      "durationDisplay": "4:12:05",
+      "category": "录播",
+      "series": "塞尔达传说",
+      "url": "https://www.youtube.com/watch?v=sample2",
+      "isShort": false,
+      "isCollaboration": false,
+      "collaborators": []
+    },
+    {
+      "id": "sample3",
+      "title": "【歌枠】夜のまったり歌枠！リクエストも募集中🎵【先斗寧／にじさんじ】",
+      "thumbnail": "https://via.placeholder.com/640x360/A78BFA/ffffff?text=Singing+Stream",
+      "publishedAt": "2026-05-25T14:00:00Z",
+      "durationDisplay": "2:08:30",
+      "category": "录播",
+      "series": "歌枠",
+      "url": "https://www.youtube.com/watch?v=sample3",
+      "isShort": false,
+      "isCollaboration": false,
+      "collaborators": []
+    },
+    {
+      "id": "sample4",
+      "title": "【Minecraft】にじさんじサーバーで大規模建築！ゲスト多数参加✨【先斗寧／にじさんじ】",
+      "thumbnail": "https://via.placeholder.com/640x360/e91e63/ffffff?text=Collab+Stream",
+      "publishedAt": "2026-05-22T11:00:00Z",
+      "durationDisplay": "3:45:20",
+      "category": "联动",
+      "series": "Minecraft",
+      "url": "https://www.youtube.com/watch?v=sample4",
+      "isShort": false,
+      "isCollaboration": true,
+      "collaborators": ["天ヶ瀬むゆ", "海妹四葉"]
+    },
+    {
+      "id": "sample5",
+      "title": "【#先斗寧】新衣装お披露目配信！✨ New Outfit Reveal【にじさんじ】",
+      "thumbnail": "https://via.placeholder.com/640x360/6D28D9/ffffff?text=New+Outfit",
+      "publishedAt": "2026-05-20T12:00:00Z",
+      "durationDisplay": "1:30:45",
+      "category": "视频",
+      "series": "特别企划",
+      "url": "https://www.youtube.com/watch?v=sample5",
+      "isShort": false,
+      "isCollaboration": false,
+      "collaborators": []
+    },
+    {
+      "id": "sample6",
+      "title": "【Short】関西弁であの名台詞を言ってみた #先斗寧 #にじさんじ",
+      "thumbnail": "https://via.placeholder.com/640x640/ff6d00/ffffff?text=Short",
+      "publishedAt": "2026-06-05T08:00:00Z",
+      "durationDisplay": "0:45",
+      "category": "短视频",
+      "series": null,
+      "url": "https://www.youtube.com/shorts/sample6",
+      "isShort": true,
+      "isCollaboration": false,
+      "collaborators": []
+    },
+    {
+      "id": "sample7",
+      "title": "【Short】🐱 猫口でおやすみの挨拶💤 #先斗寧 #にじさんじ",
+      "thumbnail": "https://via.placeholder.com/640x640/ff6d00/ffffff?text=Short",
+      "publishedAt": "2026-06-03T15:00:00Z",
+      "durationDisplay": "0:32",
+      "category": "短视频",
+      "series": null,
+      "url": "https://www.youtube.com/shorts/sample7",
+      "isShort": true,
+      "isCollaboration": false,
+      "collaborators": []
+    },
+    {
+      "id": "sample8",
+      "title": "【雑談】近況報告！新しいゲーム始めました🎮【先斗寧／にじさんじ】",
+      "thumbnail": "https://via.placeholder.com/640x360/5A7DFF/ffffff?text=Free+Talk",
+      "publishedAt": "2026-05-30T13:00:00Z",
+      "durationDisplay": "1:15:30",
+      "category": "视频",
+      "series": "雑談",
+      "url": "https://www.youtube.com/watch?v=sample8",
+      "isShort": false,
+      "isCollaboration": false,
+      "collaborators": []
+    }
+  ]
+}
