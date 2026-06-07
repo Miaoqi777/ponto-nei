@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-07T17:42:17.210Z",
+  "lastUpdated": "2026-06-07T17:44:04.324Z",
   "username": "ponto_nei",
   "displayName": "先斗寧",
   "tweets": [
@@ -108,7 +108,9 @@
     "Try fxtwitter: https://api.fxtwitter.com/user/ponto_nei",
     "fxtwitter fail: HTTP 404",
     "Try HTML scrape: https://x.com/ponto_nei",
-    "__INITIAL_STATE__ parse fail: Unexpected non-whitespace character after JSON at position 168776 (line 1 column 168777)",
+    "__INITIAL_STATE__ JSON length: 168776",
+    "Parsed OK, keys: optimist, entities, featureSwitch, settings, devices, session, snoozedTags, developer",
+    "Searched state, found 0 unique tweets",
     "No tweet data found in HTML",
     "keepExisting: 所有渠道均无推文返回"
   ]
