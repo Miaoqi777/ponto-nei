@@ -1393,20 +1393,74 @@ body.is-noscroll {
 	  font-weight: 600;
 	}
 
-	/* --- 系列小标题 --- */
+	/* --- 系列可折叠组件 --- */
+	.series-group {
+	  grid-column: 1 / -1;
+	  display: grid;
+	  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+	  gap: 1.2rem;
+	  margin-top: 1rem;
+	}
+
+	.series-group:first-child {
+	  margin-top: 0;
+	}
+
+	.series-group--plain {
+	  margin-top: 0;
+	}
+
+	/* 系列标题按钮 */
 	.series-header {
 	  grid-column: 1 / -1;
-	  padding: 0.5rem 0 0.4rem;
-	  margin-top: 1rem;
+	  display: flex;
+	  align-items: center;
+	  gap: 0.4rem;
+	  width: 100%;
+	  padding: 0.6rem 0 0.4rem;
 	  font-family: var(--font-jp);
 	  font-size: 1rem;
 	  font-weight: 600;
 	  color: var(--accent-dark);
+	  background: none;
+	  border: none;
 	  border-bottom: 2px solid rgba(139, 92, 246, 0.1);
+	  cursor: pointer;
+	  user-select: none;
+	  transition: color 0.2s ease;
 	}
 
-	.series-header:first-child {
-	  margin-top: 0;
+	.series-header:hover {
+	  color: var(--accent);
+	}
+
+	/* 折叠箭头 */
+	.series-arrow {
+	  display: inline-block;
+	  font-size: 0.7rem;
+	  transition: transform 0.3s ease;
+	  flex-shrink: 0;
+	}
+
+	.series-group.collapsed .series-arrow {
+	  transform: rotate(-90deg);
+	}
+
+	/* 系列计数 */
+	.series-count {
+	  font-size: 0.75rem;
+	  font-weight: 400;
+	  color: var(--text-muted);
+	  margin-left: auto;
+	}
+
+	/* 系列卡片容器 — 折叠过渡 */
+	.series-cards {
+	  display: contents;
+	}
+
+	.series-group.collapsed .series-cards {
+	  display: none;
 	}
 
 	/* ============================================
@@ -1492,6 +1546,10 @@ body.is-noscroll {
 
 	.video-thumb .cat-badge.stream {
 	  background: #4CAF50;
+	}
+
+	.video-thumb .cat-badge.cover {
+	  background: #e040fb;
 	}
 
 	/* 视频卡片正文 */
@@ -1727,7 +1785,8 @@ body.is-noscroll {
 	    padding: 0 1.2rem 0.8rem;
 	  }
 	  .series-header {
-	    padding: 0.4rem 0 0.3rem;
+	    padding: 0.5rem 0 0.3rem;
+	    font-size: 0.9rem;
 	  }
 	  .tweet-card {
 	    padding: 1rem 1.2rem;

@@ -7,6 +7,7 @@ const VIDEO_CATEGORIES = [
   { key: 'all',     label: '📺 全部视频' },
   { key: '录播',     label: '🎬 录播' },
   { key: '视频',     label: '🎥 视频' },
+  { key: '翻唱',     label: '🎵 翻唱' },
   { key: '短视频',   label: '⚡ 短视频' },
   { key: '联动',     label: '🤝 联动' },
 ];
@@ -141,15 +142,31 @@ function renderVideos() {
   // 按系列分组
   const grouped = groupBySeries(videos);
 
-  // 构建 HTML
+  // 构建 HTML — 每个系列包裹在 .series-group 中，标题可折叠
   let html = '';
   for (const [series, seriesVideos] of Object.entries(grouped)) {
+    html += '<div class="series-group' + (series === '__ungrouped__' ? ' series-group--plain' : '') + '">';
     if (series !== '__ungrouped__') {
-      html += `<div class="series-header">📁 ${escapeHtml(series)}</div>`;
+      html += '<button class="series-header">';
+      html += '<span class="series-arrow">▼</span>';
+      html += '📁 ' + escapeHtml(series);
+      html += '<span class="series-count">(' + seriesVideos.length + ')</span>';
+      html += '</button>';
     }
+    html += '<div class="series-cards">';
     html += seriesVideos.map(v => buildVideoCard(v)).join('');
+    html += '</div>';
+    html += '</div>';
   }
   grid.innerHTML = html;
+
+  // 绑定折叠事件
+  grid.querySelectorAll('.series-header').forEach(header => {
+    header.addEventListener('click', () => {
+      const group = header.parentElement;
+      group.classList.toggle('collapsed');
+    });
+  });
 }
 
 /**
@@ -187,6 +204,7 @@ function buildVideoCard(video) {
     case '短视频': badgeClass = 'shorts'; break;
     case '录播': badgeClass = 'stream'; break;
     case '视频': badgeClass = 'video'; break;
+    case '翻唱': badgeClass = 'cover'; break;
   }
 
   const collabInfo = video.isCollaboration && video.collaborators.length

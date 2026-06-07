@@ -45,8 +45,9 @@ var SERIES_PATTERNS = [
   { r: /Ib|Ib[:：]|イヴ.*ホラー/i, s: 'Ib' },
   { r: /8番出口|8番のりば|8ばんめ/i, s: '8番出口' },
   { r: /(【|#)ホラー|怖い話|恐怖ゲーム|ホラーゲーム/i, s: '恐怖游戏' },
-  { r: /歌枠|歌ってみた|カラオケ|弾き語り|#Cover|#歌ってみた/i, s: '歌枠' },
   { r: /踊ってみた|#踊ってみた|ダンス/i, s: '踊ってみた' },
+  { r: /歌枠|カラオケ|弾き語り/i, s: '歌枠' },
+  { r: /歌ってみた|#歌ってみた|#Cover\b|covered[ .]+by|カバー|#cover/i, s: '歌ってみた' },
   { r: /同時視聴|ウォッチパーティ|Watch[ .-]?Party/i, s: '同时视听' },
   { r: /雑談|フリートーク|近況報告|おしゃべり|#雑談/i, s: '雑談' },
   { r: /麻雀|マージャン/i, s: '麻雀' },
@@ -132,6 +133,19 @@ function detectCollaboration(description, title) {
   return { isCollab: isCollab, collaborators: isCollab ? filtered : [] };
 }
 
+// 翻唱检测: 匹配歌ってみた/Cover模式的投稿视频（非直播）
+var COVER_PATTERNS = [/歌ってみた/i, /#歌ってみた/i, /#Cover\b/i, /covered[ .]+by/i, /カバー/i, /#cover\b/i];
+
+function detectCoverSong(title, description, durationSec, hasLiveStream) {
+  if (durationSec <= 30) return false; // 太短不是翻唱
+  if (durationSec > 1800 && hasLiveStream) return false; // 长直播不是翻唱（歌枠）
+  var text = (title + ' ' + (description || ''));
+  for (var i = 0; i < COVER_PATTERNS.length; i++) {
+    if (COVER_PATTERNS[i].test(text)) return true;
+  }
+  return false;
+}
+
 function detectSeries(title, description) {
   var text = (title + ' ' + (description || ''));
   for (var i = 0; i < SERIES_PATTERNS.length; i++) {
@@ -208,7 +222,9 @@ async function main() {
     var baseCat = detectBaseCategory(v, durSec);
     var collab = detectCollaboration(desc, title);
     var series = detectSeries(title, desc);
-    var cat = collab.isCollab ? '联动' : baseCat;
+    var cat = collab.isCollab ? '联动'
+      : detectCoverSong(title, desc, durSec, !!(v.liveStreamingDetails && v.liveStreamingDetails.actualEndTime)) ? '翻唱'
+      : baseCat;
     var thumb = '';
     var t = v.snippet.thumbnails;
     if (t) thumb = (t.maxres || t.high || t.medium || t.default || {}).url || '';
