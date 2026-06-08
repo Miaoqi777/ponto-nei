@@ -351,13 +351,20 @@ function initSearchPanel() {
   // 初始渲染日期输入
   renderDateInputs();
 
-  // 系列折叠切换
-  const seriesToggle = document.getElementById('series-toggle');
-  const seriesCollapsible = document.getElementById('search-series');
-  if (seriesToggle && seriesCollapsible) {
-    seriesToggle.addEventListener('click', () => {
-      const collapsed = seriesCollapsible.classList.toggle('collapsed');
-      seriesToggle.textContent = collapsed ? '系列 ▶' : '系列 ▼';
+  // 系列折叠切换 - 默认折叠，点击展开/收起
+  var seriesToggle = document.getElementById('series-toggle');
+  var seriesDiv2 = document.getElementById('search-series');
+  if (seriesToggle && seriesDiv2) {
+    // 默认折叠
+    seriesDiv2.style.display = 'none';
+    seriesToggle.addEventListener('click', function() {
+      if (seriesDiv2.style.display === 'none') {
+        seriesDiv2.style.display = '';
+        seriesToggle.textContent = '系列 ▼';
+      } else {
+        seriesDiv2.style.display = 'none';
+        seriesToggle.textContent = '系列 ▶';
+      }
     });
   }
 
