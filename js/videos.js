@@ -182,14 +182,13 @@ function renderVideos() {
   // 构建 HTML — 每个系列包裹在 .series-group 中，标题可折叠
   let html = '';
   for (const [series, seriesVideos] of Object.entries(grouped)) {
-    html += '<div class="series-group' + (series === '__ungrouped__' ? ' series-group--plain' : '') + '">';
-    if (series !== '__ungrouped__') {
-      html += '<button class="series-header">';
-      html += '<span class="series-arrow">▼</span>';
-      html += '📁 ' + escapeHtml(series);
-      html += '<span class="series-count">(' + seriesVideos.length + ')</span>';
-      html += '</button>';
-    }
+    const displayName = series === '__ungrouped__' ? '📁 其他' : '📁 ' + escapeHtml(series);
+    html += '<div class="series-group">';
+    html += '<button class="series-header">';
+    html += '<span class="series-arrow">▼</span>';
+    html += displayName;
+    html += '<span class="series-count">(' + seriesVideos.length + ')</span>';
+    html += '</button>';
     html += '<div class="series-cards">';
     html += seriesVideos.map(v => buildVideoCard(v)).join('');
     html += '</div>';
