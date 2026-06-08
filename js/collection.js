@@ -1,9 +1,14 @@
 /* ============================================
    先斗寧 (Ponto Nei) — 商品图鉴管理逻辑
    localStorage 持久化 + 图片 Base64 编码
+   登录后按账号隔离存储
    ============================================ */
 
-const STORAGE_KEY = 'ponto-nei-collection';
+function getStorageKey() {
+  var user = getCurrentUser();
+  return user ? 'ponto-nei-collection-' + user.username : 'ponto-nei-collection';
+}
+
 const MAX_IMAGE_SIZE_MB = 2; // 单张图片最大 2MB（Base64 编码后约 2.7MB）
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -38,7 +43,7 @@ function initNavbar() {
 
 function getCollection() {
   try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    return JSON.parse(localStorage.getItem(getStorageKey())) || [];
   } catch {
     return [];
   }
@@ -46,7 +51,7 @@ function getCollection() {
 
 function saveCollection(items) {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+    localStorage.setItem(getStorageKey(), JSON.stringify(items));
   } catch (e) {
     if (e.name === 'QuotaExceededError' || e.code === 22) {
       showToast('⚠️ 存储空间不足！请删除一些旧商品或使用更小的图片', 'error');
@@ -129,6 +134,9 @@ function initFormSubmit() {
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
+
+    // 需要登录才能添加图鉴
+    if (!requireAuth()) return;
 
     const fileInput = document.getElementById('item-image');
     const name = document.getElementById('item-name').value.trim();
@@ -379,3 +387,14 @@ function showToast(message, type = 'success') {
 
   setTimeout(() => toast.remove(), 2500);
 }
+
+// ── 登录/注册成功回调（覆盖 auth.js 默认） ──────
+window._onAuthSuccessOriginal = onAuthSuccess;
+onAuthSuccess = function() {
+  if (window._onAuthSuccessOriginal) window._onAuthSuccessOriginal();
+  // 刷新图鉴数据（使用当前账号的存储键）
+  renderCollection();
+  // 重新初始化搜索排序（会重新读取数据）
+  var searchInput = document.getElementById('search-input');
+  if (searchInput) searchInput.dispatchEvent(new Event('input'));
+};

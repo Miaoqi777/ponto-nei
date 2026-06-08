@@ -12,7 +12,11 @@ const TWEET_CATEGORIES = [
 
 let allTweets = [];
 let currentFilter = 'all';
-const LS_KEY = 'ponto-nei-manual-tweets';
+
+function getManualTweetsKey() {
+  var user = getCurrentUser();
+  return user ? 'ponto-nei-manual-tweets-' + user.username : 'ponto-nei-manual-tweets';
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   initNavbar();
@@ -67,16 +71,19 @@ async function fetchAndRender() {
 
   // 3. localStorage 手动推文
   try {
-    const localTweets = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
+    // 只加载自己的手动推文（游客：公共键，登录用户：私有键）
+    var key = getManualTweetsKey();
+    var localTweets = [];
+    try { localTweets = JSON.parse(localStorage.getItem(key) || '[]'); } catch {}
     manualTweets = manualTweets.concat(localTweets);
   } catch {}
 
   // 合并去重
-  const seen = new Set();
-  const merged = [];
-  for (const t of autoTweets) { seen.add(t.id); merged.push({ ...t, source: 'auto' }); }
-  for (const t of manualTweets) {
-    if (!seen.has(t.id)) { seen.add(t.id); merged.push({ ...t, source: 'manual' }); }
+  var seen = new Set();
+  var merged = [];
+  for (var i = 0; i < autoTweets.length; i++) { seen.add(autoTweets[i].id); merged.push(Object.assign({}, autoTweets[i], { source: 'auto' })); }
+  for (var j = 0; j < manualTweets.length; j++) {
+    if (!seen.has(manualTweets[j].id)) { seen.add(manualTweets[j].id); merged.push(Object.assign({}, manualTweets[j], { source: 'manual' })); }
   }
   merged.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
@@ -230,6 +237,9 @@ function initManualForm() {
   form.addEventListener('submit', (e) => {
     e.preventDefault();
 
+    // 需要登录才能手动添加推文
+    if (!requireAuth()) return;
+
     const url = document.getElementById('manual-url').value.trim();
     const text = document.getElementById('manual-text').value.trim();
     const dateStr = document.getElementById('manual-date').value;
@@ -258,12 +268,13 @@ function initManualForm() {
       source: 'manual',
     };
 
-    // 存到 localStorage
-    let manualTweets = [];
-    try { manualTweets = JSON.parse(localStorage.getItem(LS_KEY) || '[]'); } catch {}
-    manualTweets = manualTweets.filter(t => t.id !== id);
+    // 存到 localStorage（按账号隔离）
+    var tweetKey = getManualTweetsKey();
+    var manualTweets = [];
+    try { manualTweets = JSON.parse(localStorage.getItem(tweetKey) || '[]'); } catch {}
+    manualTweets = manualTweets.filter(function(t) { return t.id !== id; });
     manualTweets.push(tweet);
-    localStorage.setItem(LS_KEY, JSON.stringify(manualTweets));
+    localStorage.setItem(tweetKey, JSON.stringify(manualTweets));
 
     // 清空表单
     document.getElementById('manual-url').value = '';
@@ -282,26 +293,69 @@ function initManualForm() {
     window.scrollTo({ top: document.getElementById('tweet-grid').offsetTop - 100, behavior: 'smooth' });
   });
 
-  // 导出 localStorage 数据（用于定期同步到 JSON 文件）
-  const exportBtn = document.getElementById('manual-export');
+  // 导出 localStorage 数据（普通用户：复制自己的推文）
+  var exportBtn = document.getElementById('manual-export');
   if (exportBtn) {
-    exportBtn.addEventListener('click', () => {
-      const manualTweets = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
+    exportBtn.addEventListener('click', function() {
+      var tweetKey = getManualTweetsKey();
+      var manualTweets = [];
+      try { manualTweets = JSON.parse(localStorage.getItem(tweetKey) || '[]'); } catch {}
       if (!manualTweets.length) {
         alert('暂无手动添加的推文');
         return;
       }
-      const json = JSON.stringify(manualTweets, null, 2);
-      navigator.clipboard.writeText(json).then(() => {
+      var json = JSON.stringify(manualTweets, null, 2);
+      navigator.clipboard.writeText(json).then(function() {
         alert('已复制 ' + manualTweets.length + ' 条手动推文到剪贴板！\n\n发给我即可同步到网站。');
-      }).catch(() => {
+      }).catch(function() {
         alert('复制失败，请手动复制：\n\n' + json);
       });
     });
   }
+
+  // 管理员发布按钮（将推文发布到公共 JSON）
+  var publishBtn = document.getElementById('btn-publish');
+  if (publishBtn) {
+    publishBtn.addEventListener('click', function() {
+      var tweetKey = getManualTweetsKey();
+      var manualTweets = [];
+      try { manualTweets = JSON.parse(localStorage.getItem(tweetKey) || '[]'); } catch {}
+      if (!manualTweets.length) {
+        alert('暂无手动添加的推文可发布');
+        return;
+      }
+      var json = JSON.stringify(manualTweets, null, 2);
+      navigator.clipboard.writeText(json).then(function() {
+        alert('✅ 已复制 ' + manualTweets.length + ' 条推文的 JSON 数据！\n\n请覆盖 data/tweets-manual.json 并提交到 GitHub，所有用户即可看到。');
+      }).catch(function() {
+        alert('复制失败，请手动复制：\n\n' + json);
+      });
+    });
+  }
+
+  // 管理员发布栏显隐
+  updateAdminBar();
 }
 
 function escapeHtml(str) {
   const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
   return String(str).replace(/[&<>"']/g, c => map[c]);
 }
+
+// ── 管理员发布栏显隐 ──────────────────────────
+function updateAdminBar() {
+  var bar = document.getElementById('admin-bar');
+  if (!bar) return;
+  var user = getCurrentUser();
+  if (user && user.isAdmin) {
+    bar.classList.add('visible');
+  } else {
+    bar.classList.remove('visible');
+  }
+}
+
+// ── 登录/注册成功回调（覆盖 auth.js 默认） ──
+onAuthSuccess = function() {
+  updateAdminBar();
+  fetchAndRender();
+};

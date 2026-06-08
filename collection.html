@@ -7,6 +7,7 @@
   <meta name="description" content="先斗寧商品图鉴管理 — 上传图片、记录价格、管理数量、保存购买链接。">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🫐</text></svg>">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/auth.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -31,7 +32,15 @@
       <li><a href="tweets.html">🐦 推文整理</a></li>
       <li><a href="collection.html">📦 我的图鉴</a></li>
     </ul>
+    <div id="nav-auth"></div>
   </nav>
+
+  <!-- ========== 迁移提示条 ========== -->
+  <div id="migrate-banner" class="migrate-banner" style="display:none;">
+    <span id="migrate-text"></span>
+    <button class="btn-migrate" onclick="doMigrate()">📥 迁移</button>
+    <button class="btn-dismiss" onclick="doDismissMigration()">✕ 忽略</button>
+  </div>
 
   <!-- ========== 页面容器 ========== -->
   <div class="page-container">
@@ -130,7 +139,50 @@
     </p>
   </footer>
 
+  <script src="js/auth.js"></script>
   <script src="js/collection.js"></script>
+
+  <!-- ========== 登录弹窗 ========== -->
+  <div class="auth-overlay" id="auth-overlay">
+    <div class="auth-card">
+      <button class="auth-close" onclick="hideAuthModal()">✕</button>
+      <div class="auth-card-logo">🫐</div>
+      <div class="auth-card-title">欢迎来到 <span>先斗寧</span> 粉丝站</div>
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="login">🔑 登录</button>
+        <button class="auth-tab" data-tab="register">📝 注册</button>
+      </div>
+      <form class="auth-form active" data-tab="login" id="login-form">
+        <div class="auth-field">
+          <label>用户名</label>
+          <input type="text" id="login-username" placeholder="输入用户名" required autocomplete="username">
+        </div>
+        <div class="auth-field">
+          <label>密码</label>
+          <input type="password" id="login-password" placeholder="输入密码" required autocomplete="current-password">
+        </div>
+        <div class="auth-error" id="login-error"></div>
+        <button type="submit" class="auth-submit">登录</button>
+      </form>
+      <form class="auth-form" data-tab="register" id="register-form">
+        <div class="auth-field">
+          <label>用户名</label>
+          <input type="text" id="register-username" placeholder="3-20个字符，中文/英文/数字" required autocomplete="username">
+        </div>
+        <div class="auth-field">
+          <label>密码</label>
+          <input type="password" id="register-password" placeholder="至少6位" required autocomplete="new-password">
+        </div>
+        <div class="auth-field">
+          <label>确认密码</label>
+          <input type="password" id="register-password-confirm" placeholder="再次输入密码" required autocomplete="new-password">
+        </div>
+        <div class="auth-error" id="register-error"></div>
+        <button type="submit" class="auth-submit">注册</button>
+      </form>
+      <p class="auth-hint">🔒 数据保存在你的浏览器中，不会上传到服务器</p>
+    </div>
+  </div>
 
   <!-- ========== 加载动画控制 ========== -->
   <script>

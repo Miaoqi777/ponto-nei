@@ -1,0 +1,309 @@
+/* ============================================
+   先斗寧 粉丝站 — 用户认证模块样式
+   弹窗 + 导航栏按钮 + 迁移提示条
+   ============================================ */
+
+/* ── 遮罩层 ──────────────────────────────────── */
+.auth-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.auth-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ── 弹窗卡片 ────────────────────────────────── */
+.auth-card {
+  background: var(--card-bg, #fff);
+  border-radius: var(--radius-lg, 16px);
+  box-shadow: var(--shadow-lg, 0 8px 32px rgba(0,0,0,0.08));
+  width: 90%;
+  max-width: 420px;
+  padding: 2rem 1.8rem 1.8rem;
+  position: relative;
+  animation: authSlideIn 0.35s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+@keyframes authSlideIn {
+  from { opacity: 0; transform: translateY(24px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.auth-card-logo {
+  text-align: center;
+  font-size: 2.2rem;
+  margin-bottom: 0.25rem;
+}
+.auth-card-title {
+  text-align: center;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text, #000);
+  margin-bottom: 1.2rem;
+}
+.auth-card-title span {
+  background: var(--gradient-primary, linear-gradient(135deg, #5A7DFF, #8B5CF6, #6D28D9));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── 标签切换 ────────────────────────────────── */
+.auth-tabs {
+  display: flex;
+  border-bottom: 2px solid var(--card-border, rgba(0,0,0,0.08));
+  margin-bottom: 1.2rem;
+}
+.auth-tab {
+  flex: 1;
+  padding: 0.6rem 0;
+  text-align: center;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text-muted, #999);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.25s, border-color 0.25s;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+}
+.auth-tab:hover { color: var(--text-secondary, #555); }
+.auth-tab.active {
+  color: var(--primary, #5A7DFF);
+  border-bottom-color: var(--primary, #5A7DFF);
+}
+
+/* ── 表单 ─────────────────────────────────────── */
+.auth-form {
+  display: none;
+}
+.auth-form.active {
+  display: block;
+}
+
+.auth-field {
+  margin-bottom: 1rem;
+}
+.auth-field label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary, #555);
+  margin-bottom: 0.35rem;
+}
+.auth-field input {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  font-size: 0.92rem;
+  border: 1.5px solid var(--card-border, rgba(0,0,0,0.1));
+  border-radius: var(--radius-md, 8px);
+  background: var(--bg-secondary, #f8f7fa);
+  color: var(--text, #000);
+  transition: border-color 0.25s, box-shadow 0.25s;
+  font-family: inherit;
+  outline: none;
+}
+.auth-field input:focus {
+  border-color: var(--primary, #5A7DFF);
+  box-shadow: 0 0 0 3px rgba(90, 125, 255, 0.12);
+}
+
+.auth-error {
+  font-size: 0.8rem;
+  color: #e74c3c;
+  min-height: 1.2em;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.auth-submit {
+  width: 100%;
+  padding: 0.7rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--gradient-primary, linear-gradient(135deg, #5A7DFF, #8B5CF6, #6D28D9));
+  border: none;
+  border-radius: var(--radius-md, 8px);
+  cursor: pointer;
+  transition: opacity 0.25s, transform 0.15s;
+  font-family: inherit;
+}
+.auth-submit:hover { opacity: 0.9; }
+.auth-submit:active { transform: scale(0.98); }
+
+.auth-hint {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-muted, #999);
+  margin-top: 0.8rem;
+}
+
+/* ── 关闭按钮 ────────────────────────────────── */
+.auth-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.9rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: var(--bg-secondary, #f8f7fa);
+  color: var(--text-muted, #999);
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, color 0.2s;
+}
+.auth-close:hover {
+  background: rgba(0,0,0,0.08);
+  color: var(--text, #000);
+}
+
+/* ── 导航栏认证按钮 ──────────────────────────── */
+#nav-auth {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+.btn-login {
+  padding: 0.4rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--gradient-primary, linear-gradient(135deg, #5A7DFF, #8B5CF6, #6D28D9));
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: opacity 0.25s, transform 0.15s;
+  font-family: inherit;
+  white-space: nowrap;
+}
+.btn-login:hover { opacity: 0.9; }
+.btn-login:active { transform: scale(0.96); }
+
+.user-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text, #000);
+  white-space: nowrap;
+}
+
+.btn-logout {
+  padding: 0.3rem 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-muted, #999);
+  background: var(--bg-secondary, #f8f7fa);
+  border: 1px solid var(--card-border, rgba(0,0,0,0.08));
+  border-radius: 16px;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+  font-family: inherit;
+  white-space: nowrap;
+}
+.btn-logout:hover {
+  color: #e74c3c;
+  border-color: #e74c3c;
+}
+
+/* ── 迁移提示条 ───────────────────────────────── */
+.migrate-banner {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding: 0.7rem 1.2rem;
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  border-radius: var(--radius-md, 8px);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #92400e;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+.migrate-banner button {
+  padding: 0.35rem 0.9rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity 0.2s;
+}
+.migrate-banner .btn-migrate {
+  background: #92400e;
+  color: #fff;
+}
+.migrate-banner .btn-migrate:hover { opacity: 0.85; }
+.migrate-banner .btn-dismiss {
+  background: transparent;
+  color: #92400e;
+  border: 1px solid #92400e;
+}
+.migrate-banner .btn-dismiss:hover { opacity: 0.7; }
+
+/* ── 管理员发布条 ────────────────────────────── */
+.admin-bar {
+  display: none;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  padding: 0.6rem 1rem;
+  background: linear-gradient(135deg, #ede9fe, #ddd6fe);
+  border-radius: var(--radius-md, 8px);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #5b21b6;
+  margin-bottom: 0.75rem;
+}
+.admin-bar.visible { display: flex; }
+.admin-bar button {
+  padding: 0.3rem 0.8rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity 0.2s;
+}
+.admin-bar .btn-publish {
+  background: #7c3aed;
+  color: #fff;
+}
+.admin-bar .btn-publish:hover { opacity: 0.85; }
+
+/* ── 响应式 ───────────────────────────────────── */
+@media (max-width: 480px) {
+  .auth-card {
+    width: 94%;
+    padding: 1.5rem 1.2rem 1.3rem;
+  }
+  .auth-card-logo { font-size: 1.8rem; }
+  .auth-card-title { font-size: 1rem; }
+
+  #nav-auth { gap: 0.3rem; }
+  .btn-login { padding: 0.3rem 0.8rem; font-size: 0.78rem; }
+  .user-label { font-size: 0.78rem; }
+  .btn-logout { font-size: 0.72rem; padding: 0.25rem 0.6rem; }
+
+  .migrate-banner { font-size: 0.78rem; padding: 0.5rem 0.8rem; }
+}
