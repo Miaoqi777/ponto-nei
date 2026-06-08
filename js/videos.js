@@ -183,7 +183,7 @@ function renderVideos() {
   let html = '';
   for (const [series, seriesVideos] of Object.entries(grouped)) {
     const displayName = series === '__ungrouped__' ? '📁 其他' : '📁 ' + escapeHtml(series);
-    html += '<div class="series-group">';
+    html += '<div class="series-group collapsed">';
     html += '<button class="series-header">';
     html += '<span class="series-arrow">▼</span>';
     html += displayName;
