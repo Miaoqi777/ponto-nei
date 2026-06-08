@@ -57,7 +57,7 @@ const SERIES_PATTERNS = [
   { r: /Supermarket[ .-]Simulator/i, s: 'Supermarket Simulator' },
   { r: /対談|ボーダーライン/i, s: '对谈' },
   { r: /Papers,[ .]Please|DEEEER|Vampire[ .-]Survivors|Heave[ .-]Ho|Untitled[ .-]Goose|LoveChoice|Only[ .-]Up|Stanley[ .-]Parable|Amanda/i, s: '独立游戏' },
-  { r: /誕生日|記念配信|Anniversary|周年|デビュー.*周年/i, s: '纪念配信' },
+  { r: /誕生日|生誕祭|誕生祭|お誕生日|半年記念|記念日|Anniversary|周年|デビュー.*周年/i, s: '纪念配信' },
   { r: /にじフェス|にじヌーン|にじさんじ甲子園|にじGTA|にじ歌謡祭|にじエアライダー/i, s: 'NIJISANJI大型企画' },
   { r: /#shorts|#Short\b/i, s: 'Shorts' },
 ];
