@@ -351,6 +351,16 @@ function initSearchPanel() {
   // 初始渲染日期输入
   renderDateInputs();
 
+  // 系列折叠切换
+  const seriesToggle = document.getElementById('series-toggle');
+  const seriesCollapsible = document.getElementById('search-series');
+  if (seriesToggle && seriesCollapsible) {
+    seriesToggle.addEventListener('click', () => {
+      const collapsed = seriesCollapsible.classList.toggle('collapsed');
+      seriesToggle.textContent = collapsed ? '▶ 系列' : '▼ 系列';
+    });
+  }
+
   // 面板折叠
   const toggle = document.getElementById('search-toggle');
   const body = document.getElementById('search-body');

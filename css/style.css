@@ -1921,6 +1921,27 @@ body.is-noscroll {
   color: #fff;
 }
 
+/* 系列折叠 */
+.series-toggle {
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.2s;
+}
+.series-toggle:hover {
+  color: var(--accent);
+}
+.series-collapsible {
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.2s ease;
+  max-height: 600px;
+  opacity: 1;
+}
+.series-collapsible.collapsed {
+  max-height: 0;
+  opacity: 0;
+  margin: 0;
+}
+
 .search-input {
   flex: 1;
   min-width: 200px;
