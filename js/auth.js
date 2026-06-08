@@ -1,12 +1,22 @@
 /* ============================================
    先斗寧 粉丝站 — 用户认证模块
-   基于 localStorage，无需后端服务器
+   基于 Supabase 云数据库，跨设备同步账号
    ============================================ */
 
 const ADMIN_USERNAME = 'chloe';       // 管理员用户名
-const USERS_KEY = 'ponto-nei-users';
+const USERS_KEY = 'ponto-nei-users';  // localStorage 兜底
 const SESSION_KEY = 'ponto-nei-session';
 const SESSION_TTL_HOURS = 168;        // 7天自动退出
+
+// ── Supabase 初始化 ──────────────────────────────
+
+var supabase = (function() {
+  if (typeof window.supabase === 'undefined') return null;
+  return window.supabase.createClient(
+    'https://wsqihhpyxgcbtjfhhrvk.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndzcWloaHB5eGdjYnRqZmhocnZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5MTM4NzYsImV4cCI6MjA5NjQ4OTg3Nn0.rh1RBih_BiraPLhUpWaXjcCcmDXRnS7kGHBBofiSBhk'
+  );
+})();
 
 // ── 工具函数 ─────────────────────────────────────
 
@@ -31,7 +41,6 @@ function sha256(message) {
       }).join('');
     });
   }
-  // 降级方案：简单hash（极端老旧浏览器）
   return Promise.resolve(simpleHash(message));
 }
 
@@ -44,14 +53,14 @@ function simpleHash(str) {
   }
   var h = Math.abs(hash).toString(16);
   while (h.length < 16) h = '0' + h;
-  return 's' + h; // 前缀标记降级方案
+  return 's' + h;
 }
 
 async function hashPassword(password, salt) {
   return await sha256(salt + password);
 }
 
-// ── 用户 CRUD ─────────────────────────────────────
+// ── 用户 CRUD（Supabase 优先，localStorage 兜底）──
 
 function getUsers() {
   try { return JSON.parse(localStorage.getItem(USERS_KEY)) || []; }
@@ -91,7 +100,7 @@ function clearSession() {
 
 // ── 公开 API ──────────────────────────────────────
 
-/** 注册 */
+/** 注册 — Supabase 优先，失败则 localStorage 兜底 */
 async function register(username, password) {
   username = (username || '').trim();
   if (!username || username.length < 3 || username.length > 20) {
@@ -104,18 +113,44 @@ async function register(username, password) {
     return { success: false, error: '密码至少 6 位' };
   }
 
-  var users = getUsers();
   var lower = username.toLowerCase();
+  var salt = generateSalt();
+  var hash = await hashPassword(password, salt);
+  var isAdmin = (ADMIN_USERNAME.toLowerCase() === lower);
+
+  // 尝试 Supabase
+  if (supabase) {
+    try {
+      // 检查是否已存在
+      var { data: existing } = await supabase.from('users').select('username').eq('username', username).maybeSingle();
+      if (existing) {
+        return { success: false, error: '用户名已存在' };
+      }
+
+      var { error } = await supabase.from('users').insert({
+        username: username,
+        password_hash: hash,
+        salt: salt,
+        is_admin: isAdmin
+      });
+
+      if (!error) {
+        saveSession(username, isAdmin);
+        return { success: true, username: username, isAdmin: isAdmin };
+      }
+      console.warn('Supabase insert failed, falling back to localStorage:', error.message);
+    } catch (e) {
+      console.warn('Supabase unavailable, falling back to localStorage:', e.message);
+    }
+  }
+
+  // localStorage 兜底
+  var users = getUsers();
   for (var i = 0; i < users.length; i++) {
     if (users[i].username.toLowerCase() === lower) {
       return { success: false, error: '用户名已存在' };
     }
   }
-
-  var salt = generateSalt();
-  var hash = await hashPassword(password, salt);
-  var isAdmin = (ADMIN_USERNAME.toLowerCase() === lower);
-
   users.push({
     username: username,
     passwordHash: hash,
@@ -123,40 +158,61 @@ async function register(username, password) {
     isAdmin: isAdmin,
     createdAt: new Date().toISOString()
   });
-
   saveUsers(users);
   saveSession(username, isAdmin);
   return { success: true, username: username, isAdmin: isAdmin };
 }
 
-/** 登录 */
+/** 登录 — Supabase 优先，失败则 localStorage 兜底 */
 async function login(username, password) {
   username = (username || '').trim();
   if (!username || !password) {
     return { success: false, error: '请输入用户名和密码' };
   }
 
-  var users = getUsers();
   var lower = username.toLowerCase();
-  var user = null;
+
+  // 尝试 Supabase
+  if (supabase) {
+    try {
+      var { data: user, error } = await supabase.from('users').select('*').eq('username', username).maybeSingle();
+      if (!error && user) {
+        var hash = await hashPassword(password, user.salt);
+        if (hash === user.password_hash) {
+          saveSession(user.username, user.is_admin);
+          return { success: true, username: user.username, isAdmin: user.is_admin };
+        }
+        return { success: false, error: '密码错误' };
+      }
+      if (!error && !user) {
+        // Supabase 里没找到，查 localStorage
+      }
+    } catch (e) {
+      console.warn('Supabase unavailable, falling back to localStorage:', e.message);
+    }
+  }
+
+  // localStorage 兜底
+  var users = getUsers();
+  var localUser = null;
   for (var i = 0; i < users.length; i++) {
     if (users[i].username.toLowerCase() === lower) {
-      user = users[i];
+      localUser = users[i];
       break;
     }
   }
 
-  if (!user) {
+  if (!localUser) {
     return { success: false, error: '用户名不存在' };
   }
 
-  var hash = await hashPassword(password, user.salt);
-  if (hash !== user.passwordHash) {
+  var localHash = await hashPassword(password, localUser.salt);
+  if (localHash !== localUser.passwordHash) {
     return { success: false, error: '密码错误' };
   }
 
-  saveSession(user.username, user.isAdmin);
-  return { success: true, username: user.username, isAdmin: user.isAdmin };
+  saveSession(localUser.username, localUser.isAdmin);
+  return { success: true, username: localUser.username, isAdmin: localUser.isAdmin };
 }
 
 /** 退出 */
@@ -351,9 +407,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 /** 登录/注册成功后的回调 — 各页面可覆盖 */
 function onAuthSuccess() {
-  // 检测游客数据迁移
   if (needMigration()) showMigrateBanner();
-  // 刷新当前页面数据
   if (typeof renderCollection === 'function') renderCollection();
   if (typeof fetchAndRender === 'function') fetchAndRender();
 }
