@@ -244,6 +244,20 @@ function hasGuestTweets() {
   } catch (e) { return false; }
 }
 
+function hasGuestFavTweets() {
+  try {
+    var d = JSON.parse(localStorage.getItem('ponto-nei-fav-tweets') || '[]');
+    return d.length > 0;
+  } catch (e) { return false; }
+}
+
+function hasGuestFavVideos() {
+  try {
+    var d = JSON.parse(localStorage.getItem('ponto-nei-fav-videos') || '[]');
+    return d.length > 0;
+  } catch (e) { return false; }
+}
+
 function migrateGuestCollection(username) {
   var guestKey = 'ponto-nei-collection';
   var userKey = 'ponto-nei-collection-' + username;
@@ -280,6 +294,38 @@ function migrateGuestTweets(username) {
   return count;
 }
 
+function migrateGuestFavTweets(username) {
+  var guestKey = 'ponto-nei-fav-tweets';
+  var userKey = 'ponto-nei-fav-tweets-' + username;
+  var guest = [];
+  try { guest = JSON.parse(localStorage.getItem(guestKey) || '[]'); } catch (e) {}
+  if (!guest.length) return 0;
+  var user = [];
+  try { user = JSON.parse(localStorage.getItem(userKey) || '[]'); } catch (e) {}
+  var count = 0;
+  guest.forEach(function(id) {
+    if (user.indexOf(id) === -1) { user.push(id); count++; }
+  });
+  localStorage.setItem(userKey, JSON.stringify(user));
+  return count;
+}
+
+function migrateGuestFavVideos(username) {
+  var guestKey = 'ponto-nei-fav-videos';
+  var userKey = 'ponto-nei-fav-videos-' + username;
+  var guest = [];
+  try { guest = JSON.parse(localStorage.getItem(guestKey) || '[]'); } catch (e) {}
+  if (!guest.length) return 0;
+  var user = [];
+  try { user = JSON.parse(localStorage.getItem(userKey) || '[]'); } catch (e) {}
+  var count = 0;
+  guest.forEach(function(id) {
+    if (user.indexOf(id) === -1) { user.push(id); count++; }
+  });
+  localStorage.setItem(userKey, JSON.stringify(user));
+  return count;
+}
+
 function dismissMigration() {
   var user = getCurrentUser();
   if (user) localStorage.setItem('ponto-nei-migrate-dismissed', user.username);
@@ -289,7 +335,7 @@ function needMigration() {
   var user = getCurrentUser();
   if (!user) return false;
   if (localStorage.getItem('ponto-nei-migrate-dismissed') === user.username) return false;
-  return hasGuestCollection() || hasGuestTweets();
+  return hasGuestCollection() || hasGuestTweets() || hasGuestFavTweets() || hasGuestFavVideos();
 }
 
 // ── 弹窗 UI ───────────────────────────────────────
@@ -419,7 +465,9 @@ function showMigrateBanner() {
   if (!banner) return;
   var c = hasGuestCollection() ? '图鉴' : '';
   var t = hasGuestTweets() ? '推文' : '';
-  var items = [c, t].filter(Boolean).join('和');
+  var ft = hasGuestFavTweets() ? '推文收藏' : '';
+  var fv = hasGuestFavVideos() ? '视频收藏' : '';
+  var items = [c, t, ft, fv].filter(Boolean).join('、');
   document.getElementById('migrate-text').textContent =
     '检测到未登录时的' + items + '数据，是否迁移到当前账号？';
   banner.style.display = 'flex';
@@ -430,7 +478,14 @@ function doMigrate() {
   if (!user) return;
   var c = migrateGuestCollection(user.username);
   var t = migrateGuestTweets(user.username);
-  alert('已迁移 ' + c + ' 条图鉴、' + t + ' 条推文到账号 ' + user.username);
+  var ft = migrateGuestFavTweets(user.username);
+  var fv = migrateGuestFavVideos(user.username);
+  var parts = [];
+  if (c > 0) parts.push(c + ' 条图鉴');
+  if (t > 0) parts.push(t + ' 条推文');
+  if (ft > 0) parts.push(ft + ' 条推文收藏');
+  if (fv > 0) parts.push(fv + ' 条视频收藏');
+  alert('已迁移 ' + parts.join('、') + ' 到账号 ' + user.username);
   dismissMigration();
   document.getElementById('migrate-banner').style.display = 'none';
   if (typeof renderCollection === 'function') renderCollection();

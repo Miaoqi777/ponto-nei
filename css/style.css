@@ -1360,6 +1360,63 @@ body.is-noscroll {
 	  color: #fff;
 	}
 
+/* ============================================
+   收藏按钮
+   ============================================ */
+.fav-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 2px 4px;
+  line-height: 1;
+  transition: transform 0.2s ease;
+  user-select: none;
+  border-radius: 50%;
+}
+.fav-btn:hover { transform: scale(1.3); }
+.fav-btn:active { transform: scale(0.85); }
+
+/* 推文卡片中的收藏按钮 */
+.fav-btn-tweet {
+  font-size: 0.95rem;
+  vertical-align: middle;
+  margin-right: 0.15rem;
+}
+
+/* 视频卡片缩略图overlay收藏按钮 */
+.fav-btn-video {
+  position: absolute;
+  top: 8px; right: 8px;
+  z-index: 3;
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.2s ease, background 0.2s ease;
+  padding: 0;
+}
+.video-card:hover .fav-btn-video,
+.fav-btn-video.favorited { opacity: 1; }
+.fav-btn-video:hover { background: rgba(0, 0, 0, 0.7); transform: scale(1.1); }
+.fav-btn-video.favorited {
+  background: rgba(220, 38, 38, 0.75);
+  color: #fff;
+}
+
+
+/* 收藏过滤器标签 */
+.filter-tab.fav-tab { border-style: dashed; }
+.filter-tab.fav-tab.active {
+  background: #e11d48;
+  border-color: #e11d48;
+  color: #fff;
+}
 	.filter-tab .count {
 	  display: inline-block;
 	  margin-left: 0.3rem;

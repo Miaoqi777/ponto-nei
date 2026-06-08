@@ -18,10 +18,59 @@ function getManualTweetsKey() {
   return user ? 'ponto-nei-manual-tweets-' + user.username : 'ponto-nei-manual-tweets';
 }
 
+// ── 推文收藏 ─────────────────────────────────────
+function getFavTweetsKey() {
+  var user = getCurrentUser();
+  return user ? 'ponto-nei-fav-tweets-' + user.username : 'ponto-nei-fav-tweets';
+}
+
+function getFavTweets() {
+  try { return JSON.parse(localStorage.getItem(getFavTweetsKey()) || '[]'); }
+  catch (e) { return []; }
+}
+
+function saveFavTweets(ids) {
+  try { localStorage.setItem(getFavTweetsKey(), JSON.stringify(ids)); }
+  catch (e) { console.warn('saveFavTweets failed:', e); }
+}
+
+function toggleFavTweet(id) {
+  if (!requireAuth()) return;
+  id = String(id);
+  var favs = getFavTweets();
+  var idx = favs.indexOf(id);
+  var nowFav = false;
+  if (idx === -1) { favs.push(id); nowFav = true; }
+  else { favs.splice(idx, 1); }
+  saveFavTweets(favs);
+  // 更新页面上所有同ID按钮
+  var btns = document.querySelectorAll('.fav-btn-tweet[data-id="' + id + '"]');
+  btns.forEach(function(btn) {
+    btn.classList.toggle('favorited', nowFav);
+    btn.innerHTML = nowFav ? '❤️' : '🤍';
+    btn.title = nowFav ? '取消收藏' : '收藏';
+  });
+  // 如果在收藏视图且取消了收藏，重新渲染
+  if (currentFilter === '__favorites__' && !nowFav) {
+    renderTweets();
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   initNavbar();
   fetchAndRender();
   initManualForm();
+
+  // 收藏按钮事件委托
+  var tweetGrid = document.getElementById('tweet-grid');
+  if (tweetGrid) {
+    tweetGrid.addEventListener('click', function(e) {
+      var btn = e.target.closest('.fav-btn-tweet');
+      if (!btn) return;
+      e.preventDefault();
+      toggleFavTweet(btn.dataset.id);
+    });
+  }
 });
 
 function initNavbar() {
@@ -117,9 +166,19 @@ function buildFilterTabs() {
       </button>
     `).join('');
 
+  // 添加收藏标签
+  var favCount = getFavTweets().length;
+  container.innerHTML +=
+    '<button class="filter-tab fav-tab' + (currentFilter === '__favorites__' ? ' active' : '') + '" data-filter="__favorites__">' +
+    '❤️ 我收藏的推文<span class="count">' + favCount + '</span>' +
+    '</button>';
+
   container.querySelectorAll('.filter-tab').forEach(btn => {
     btn.addEventListener('click', () => {
-      currentFilter = btn.dataset.filter;
+      var filter = btn.dataset.filter;
+      // 收藏标签需要登录
+      if (filter === '__favorites__' && !requireAuth()) return;
+      currentFilter = filter;
       container.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       renderTweets();
@@ -137,7 +196,10 @@ function renderTweets() {
   if (!grid) return;
 
   let tweets = allTweets;
-  if (currentFilter === '手动添加') {
+  if (currentFilter === '__favorites__') {
+    var favIds = getFavTweets();
+    tweets = tweets.filter(function(t) { return favIds.indexOf(String(t.id)) !== -1; });
+  } else if (currentFilter === '手动添加') {
     tweets = tweets.filter(t => t.source === 'manual');
   } else if (currentFilter !== 'all') {
     tweets = tweets.filter(t => t.category === currentFilter);
@@ -147,9 +209,12 @@ function renderTweets() {
   if (countEl) countEl.textContent = `共 ${tweets.length} 条推文`;
 
   if (tweets.length === 0) {
+    var emptyMsg = currentFilter === '__favorites__'
+      ? '<h3>还没有收藏任何推文</h3><p>点击推文卡片上的 🤍 按钮来收藏吧！</p>'
+      : '<h3>该分类暂无推文</h3>';
     grid.innerHTML = `<div class="empty-state">
-      <span class="empty-icon">🐦</span>
-      <h3>该分类暂无推文</h3>
+      <span class="empty-icon">${currentFilter === '__favorites__' ? '💔' : '🐦'}</span>
+      ${emptyMsg}
     </div>`;
     return;
   }
@@ -166,6 +231,9 @@ function buildTweetCard(tweet) {
     ? `<div class="tweet-manual-badge">✏️ 手动添加</div>`
     : '';
 
+  var favIds = getFavTweets();
+  var isFav = favIds.indexOf(String(tweet.id)) !== -1;
+
   return `
     <div class="card tweet-card">
       ${manualBadge}
@@ -178,6 +246,11 @@ function buildTweetCard(tweet) {
       <div class="tweet-body">${linkifyText(escapeHtml(tweet.text))}</div>
       ${tweet.media && tweet.media.length ? buildMediaGrid(tweet.media) : ''}
       <div class="tweet-footer">
+        <button class="fav-btn fav-btn-tweet${isFav ? ' favorited' : ''}"
+                data-id="${tweet.id}"
+                title="${isFav ? '取消收藏' : '收藏'}">
+          ${isFav ? '❤️' : '🤍'}
+        </button>
         <span class="tweet-category">${escapeHtml(tweet.category)}</span>
         ${tweet.likes != null ? `<span>❤️ ${formatCount(tweet.likes)}</span>` : ''}
         ${tweet.retweets != null ? `<span>🔁 ${formatCount(tweet.retweets)}</span>` : ''}
