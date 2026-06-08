@@ -15,6 +15,28 @@ const VIDEO_CATEGORIES = [
 let allVideos = [];
 let currentFilter = 'all';
 
+// ── YouTube 缩略图容错 ──────────────────────────────
+// 国内网络 i.ytimg.com 可能被墙，自动换域名+降分辨率
+document.addEventListener('error', function(e) {
+  const img = e.target;
+  if (img.tagName !== 'IMG') return;
+  var s = img.src;
+  // 1. 域名切换: i.ytimg.com → img.youtube.com
+  if (s.indexOf('i.ytimg.com') > -1) {
+    img.src = s.replace('i.ytimg.com', 'img.youtube.com');
+    return;
+  }
+  // 2. 分辨率回退: maxres → hq → mq
+  if (s.indexOf('maxresdefault') > -1) {
+    img.src = s.replace('maxresdefault', 'hqdefault');
+    return;
+  }
+  if (s.indexOf('hqdefault') > -1) {
+    img.src = s.replace('hqdefault', 'mqdefault');
+    return;
+  }
+}, true); // capture phase 确保捕获到 img error 事件
+
 // 高级搜索状态
 const searchState = {
   categories: [],     // 选中的大分类，空=全部
@@ -496,8 +518,7 @@ function buildVideoCard(video) {
        class="card video-card">
       <div class="video-thumb">
         <img src="${escapeHtml(video.thumbnail)}"
-             alt="${escapeHtml(video.title)}" loading="lazy"
-             onerror="var s=this.src;if(s.indexOf('i.ytimg.com')>-1){this.src=s.replace('i.ytimg.com','img.youtube.com');}else if(s.indexOf('maxresdefault')>-1){this.src=s.replace('maxresdefault','hqdefault');}">
+             alt="${escapeHtml(video.title)}" loading="lazy">
         <span class="duration">${escapeHtml(video.durationDisplay)}</span>
         <span class="cat-badge ${badgeClass}">${escapeHtml(video.category)}</span>
       </div>
