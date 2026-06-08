@@ -357,7 +357,7 @@ function initSearchPanel() {
   if (seriesToggle && seriesCollapsible) {
     seriesToggle.addEventListener('click', () => {
       const collapsed = seriesCollapsible.classList.toggle('collapsed');
-      seriesToggle.textContent = collapsed ? '▶ 系列' : '▼ 系列';
+      seriesToggle.textContent = collapsed ? '系列 ▶' : '系列 ▼';
     });
   }
 
