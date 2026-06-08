@@ -496,7 +496,9 @@ function buildVideoCard(video) {
        class="card video-card">
       <div class="video-thumb">
         <img src="${escapeHtml(video.thumbnail)}"
-             alt="${escapeHtml(video.title)}" loading="lazy">
+             alt="${escapeHtml(video.title)}" loading="lazy"
+             referrerpolicy="no-referrer"
+             onerror="var s=this.src;var m=s.match(/(.+\/vi\/[^\/]+)\/.+/);if(m){var b=m[1];if(s.includes('maxresdefault'))this.src=b+'/hqdefault.jpg';else if(s.includes('hqdefault'))this.src=b+'/mqdefault.jpg';else this.outerHTML='<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:2rem;background:#1a1a2e;\'>🎬</div>';}"
         <span class="duration">${escapeHtml(video.durationDisplay)}</span>
         <span class="cat-badge ${badgeClass}">${escapeHtml(video.category)}</span>
       </div>
