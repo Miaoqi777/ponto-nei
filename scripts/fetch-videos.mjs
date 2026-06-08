@@ -227,7 +227,7 @@ async function main() {
       : baseCat;
     var thumb = '';
     var t = v.snippet.thumbnails;
-    if (t) thumb = (t.maxres || t.high || t.medium || t.default || {}).url || '';
+    if (t) thumb = ((t.maxres || t.high || t.medium || t.default || {}).url || '').replace('i.ytimg.com','img.youtube.com');
 
     return {
       id: v.id,

@@ -497,7 +497,7 @@ function buildVideoCard(video) {
       <div class="video-thumb">
         <img src="${escapeHtml(video.thumbnail)}"
              alt="${escapeHtml(video.title)}" loading="lazy"
-             onerror="if(this.src.indexOf('maxresdefault')>-1)this.src=this.src.replace('maxresdefault','hqdefault');">
+             onerror="var s=this.src;if(s.indexOf('i.ytimg.com')>-1){this.src=s.replace('i.ytimg.com','img.youtube.com');}else if(s.indexOf('maxresdefault')>-1){this.src=s.replace('maxresdefault','hqdefault');}">
         <span class="duration">${escapeHtml(video.durationDisplay)}</span>
         <span class="cat-badge ${badgeClass}">${escapeHtml(video.category)}</span>
       </div>
