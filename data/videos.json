@@ -1,8 +1,34 @@
 {
-  "lastUpdated": "2026-06-15T09:41:04.460Z",
+  "lastUpdated": "2026-06-16T09:07:20.894Z",
   "channelId": "UCe22Bcwd_GCpTjLxn83zl7A",
   "channelTitle": "先斗寧 / Ponto Nei 【にじさんじ】",
   "videos": [
+    {
+      "id": "O8IBn77Fens",
+      "title": "【#あらなみマイクラ】ヴォーデン討伐部、始動！【先斗寧/にじさんじ】",
+      "thumbnail": "https://img.youtube.com/vi/O8IBn77Fens/maxresdefault_live.jpg",
+      "publishedAt": "2026-06-16T09:05:18Z",
+      "durationDisplay": "0:00",
+      "category": "短视频",
+      "series": "Minecraft",
+      "url": "https://www.youtube.com/watch?v=O8IBn77Fens",
+      "isShort": true,
+      "isCollaboration": false,
+      "collaborators": []
+    },
+    {
+      "id": "YdK9QCTx59s",
+      "title": "【#あらなみマイクラ】てぇ点カメラは今日も壁から見守っている【先斗寧/にじさんじ】",
+      "thumbnail": "https://img.youtube.com/vi/YdK9QCTx59s/maxresdefault.jpg",
+      "publishedAt": "2026-06-15T17:49:10Z",
+      "durationDisplay": "4:34:48",
+      "category": "录播",
+      "series": "Minecraft",
+      "url": "https://www.youtube.com/watch?v=YdK9QCTx59s",
+      "isShort": false,
+      "isCollaboration": false,
+      "collaborators": []
+    },
     {
       "id": "9c8P4F5jByg",
       "title": "フライディ・チャイナタウン/泰葉 踊ってみた🫴 #にじさんじ #shorts",
@@ -12,19 +38,6 @@
       "category": "短视频",
       "series": "踊ってみた",
       "url": "https://www.youtube.com/watch?v=9c8P4F5jByg",
-      "isShort": true,
-      "isCollaboration": false,
-      "collaborators": []
-    },
-    {
-      "id": "YdK9QCTx59s",
-      "title": "【#あらなみマイクラ】てぇ点カメラは今日も壁から見守っている【先斗寧/にじさんじ】",
-      "thumbnail": "https://img.youtube.com/vi/YdK9QCTx59s/maxresdefault_live.jpg",
-      "publishedAt": "2026-06-15T08:07:46Z",
-      "durationDisplay": "0:00",
-      "category": "短视频",
-      "series": "Minecraft",
-      "url": "https://www.youtube.com/watch?v=YdK9QCTx59s",
       "isShort": true,
       "isCollaboration": false,
       "collaborators": []
