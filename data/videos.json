@@ -1,18 +1,31 @@
 {
-  "lastUpdated": "2026-06-16T09:07:20.894Z",
+  "lastUpdated": "2026-06-17T08:39:32.523Z",
   "channelId": "UCe22Bcwd_GCpTjLxn83zl7A",
   "channelTitle": "先斗寧 / Ponto Nei 【にじさんじ】",
   "videos": [
     {
+      "id": "uR2QWS-RxYU",
+      "title": "【#あらなみマイクラ】ウォーデン討伐部、再始動！【先斗寧/にじさんじ】",
+      "thumbnail": "https://img.youtube.com/vi/uR2QWS-RxYU/maxresdefault.jpg",
+      "publishedAt": "2026-06-16T16:09:12Z",
+      "durationDisplay": "3:51:24",
+      "category": "录播",
+      "series": "Minecraft",
+      "url": "https://www.youtube.com/watch?v=uR2QWS-RxYU",
+      "isShort": false,
+      "isCollaboration": false,
+      "collaborators": []
+    },
+    {
       "id": "O8IBn77Fens",
-      "title": "【#あらなみマイクラ】ヴォーデン討伐部、始動！【先斗寧/にじさんじ】",
-      "thumbnail": "https://img.youtube.com/vi/O8IBn77Fens/maxresdefault_live.jpg",
-      "publishedAt": "2026-06-16T09:05:18Z",
-      "durationDisplay": "0:00",
-      "category": "短视频",
+      "title": "【#あらなみマイクラ】ウォーデン討伐部、始動！【先斗寧/にじさんじ】",
+      "thumbnail": "https://img.youtube.com/vi/O8IBn77Fens/maxresdefault.jpg",
+      "publishedAt": "2026-06-16T11:19:31Z",
+      "durationDisplay": "58:14",
+      "category": "录播",
       "series": "Minecraft",
       "url": "https://www.youtube.com/watch?v=O8IBn77Fens",
-      "isShort": true,
+      "isShort": false,
       "isCollaboration": false,
       "collaborators": []
     },
