@@ -1,8 +1,43 @@
 {
-  "lastUpdated": "2026-06-25T06:59:01.099Z",
+  "lastUpdated": "2026-06-26T07:05:55.482Z",
   "channelId": "UCe22Bcwd_GCpTjLxn83zl7A",
   "channelTitle": "先斗寧 / Ponto Nei 【にじさんじ】",
   "videos": [
+    {
+      "id": "xVbXWKe9Q4M",
+      "title": "【激辛ランチ】第11回！まだまだ流行中の「麻辣湯」を食べよう！【先斗寧/にじさんじ】",
+      "thumbnail": "https://img.youtube.com/vi/xVbXWKe9Q4M/maxresdefault.jpg",
+      "publishedAt": "2026-06-26T05:26:06Z",
+      "durationDisplay": "1:24:37",
+      "category": "录播",
+      "series": "激辛ランチ",
+      "url": "https://www.youtube.com/watch?v=xVbXWKe9Q4M",
+      "isShort": false,
+      "isCollaboration": false,
+      "collaborators": []
+    },
+    {
+      "id": "zdy1DAG48UA",
+      "title": "【スプラトゥーン3】強い人たちとプラべの時間！！！！！【先斗寧/にじさんじ】",
+      "thumbnail": "https://img.youtube.com/vi/zdy1DAG48UA/maxresdefault.jpg",
+      "publishedAt": "2026-06-25T14:09:35Z",
+      "durationDisplay": "2:57:27",
+      "category": "联动",
+      "series": "Splatoon",
+      "url": "https://www.youtube.com/watch?v=zdy1DAG48UA",
+      "isShort": false,
+      "isCollaboration": true,
+      "collaborators": [
+        "SakuraRitsuki",
+        "SasakiSaku",
+        "FuwaMinato",
+        "FurenELustario",
+        "Ibrahim",
+        "NagaoKei",
+        "IgarashiRika",
+        "mai_nyaga0k"
+      ]
+    },
     {
       "id": "8i8TT_pcEFc",
       "title": "【#あらなみマイクラ】マグマアスレを作りますよ！案募集！【先斗寧/にじさんじ】",
