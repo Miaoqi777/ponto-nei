@@ -1,8 +1,34 @@
 {
-  "lastUpdated": "2026-08-21T04:06:59.945Z",
+  "lastUpdated": "2026-08-22T04:01:29.064Z",
   "channelId": "UCe22Bcwd_GCpTjLxn83zl7A",
   "channelTitle": "先斗寧 / Ponto Nei 【にじさんじ】",
   "videos": [
+    {
+      "id": "2yESOI0CQjY",
+      "title": "【 supported by DAM 】 誕生日記念！チルめな歌枠✨ #ぽぽんと誕生クールだねい2026【先斗寧/にじさんじ】",
+      "thumbnail": "https://img.youtube.com/vi/2yESOI0CQjY/maxresdefault.jpg",
+      "publishedAt": "2026-08-21T11:03:12Z",
+      "durationDisplay": "1:01:45",
+      "category": "录播",
+      "series": "歌枠",
+      "url": "https://www.youtube.com/watch?v=2yESOI0CQjY",
+      "isShort": false,
+      "isCollaboration": false,
+      "collaborators": []
+    },
+    {
+      "id": "n7KetfM7AsQ",
+      "title": "【歌ってみた】セレナーデ  / なとり【先斗寧/にじさんじ】",
+      "thumbnail": "https://img.youtube.com/vi/n7KetfM7AsQ/maxresdefault.jpg",
+      "publishedAt": "2026-08-21T10:00:06Z",
+      "durationDisplay": "3:40",
+      "category": "翻唱",
+      "series": "歌ってみた",
+      "url": "https://www.youtube.com/watch?v=n7KetfM7AsQ",
+      "isShort": false,
+      "isCollaboration": false,
+      "collaborators": []
+    },
     {
       "id": "YlO0JEkJJDI",
       "title": "【#ぽぽんと誕生クールだねい2026】ミニ告知付き！一緒にお誕生日迎えようよ🎂【先斗寧/にじさんじ】",
@@ -13,19 +39,6 @@
       "series": "纪念配信",
       "url": "https://www.youtube.com/watch?v=YlO0JEkJJDI",
       "isShort": false,
-      "isCollaboration": false,
-      "collaborators": []
-    },
-    {
-      "id": "2yESOI0CQjY",
-      "title": "【 supported by DAM 】 誕生日記念！チルめな歌枠✨ #ぽぽんと誕生クールだねい2026【先斗寧/にじさんじ】",
-      "thumbnail": "https://img.youtube.com/vi/2yESOI0CQjY/maxresdefault_live.jpg",
-      "publishedAt": "2026-08-18T19:15:40Z",
-      "durationDisplay": "0:00",
-      "category": "短视频",
-      "series": "歌枠",
-      "url": "https://www.youtube.com/watch?v=2yESOI0CQjY",
-      "isShort": true,
       "isCollaboration": false,
       "collaborators": []
     },
