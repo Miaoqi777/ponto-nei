@@ -1,8 +1,24 @@
 {
-  "lastUpdated": "2026-08-28T15:31:07.953Z",
+  "lastUpdated": "2026-08-29T10:15:06.852Z",
   "channelId": "UCe22Bcwd_GCpTjLxn83zl7A",
   "channelTitle": "先斗寧 / Ponto Nei 【にじさんじ】",
   "videos": [
+    {
+      "id": "l0CRF4y1BvQ",
+      "title": "【#ぷぎゃりて深夜3D】ぷぎゃりてお泊り会！ホラゲもあるんだよ！！！【五十嵐梨花/立伝都々/先斗寧/にじさんじ】",
+      "thumbnail": "https://img.youtube.com/vi/l0CRF4y1BvQ/maxresdefault.jpg",
+      "publishedAt": "2026-08-28T19:26:57Z",
+      "durationDisplay": "2:20:26",
+      "category": "联动",
+      "series": "恐怖游戏",
+      "url": "https://www.youtube.com/watch?v=l0CRF4y1BvQ",
+      "isShort": false,
+      "isCollaboration": true,
+      "collaborators": [
+        "IgarashiRika",
+        "TachitsuteToto"
+      ]
+    },
     {
       "id": "WNlWRMwSv4M",
       "title": "【How to Fish】めちゃかわ連合で話題の釣りゲームをやるんだよォ！！！【先斗寧/にじさんじ】",
@@ -18,22 +34,6 @@
         "HanabatakeChaika",
         "FurenELustario",
         "IgarashiRika"
-      ]
-    },
-    {
-      "id": "l0CRF4y1BvQ",
-      "title": "【#ぷぎゃりて深夜3D】ぷぎゃりてお泊り会！ホラゲもあるんだよ！！！【五十嵐梨花/立伝都々/先斗寧/にじさんじ】",
-      "thumbnail": "https://img.youtube.com/vi/l0CRF4y1BvQ/maxresdefault_live.jpg",
-      "publishedAt": "2026-08-26T16:21:28Z",
-      "durationDisplay": "0:00",
-      "category": "联动",
-      "series": "恐怖游戏",
-      "url": "https://www.youtube.com/watch?v=l0CRF4y1BvQ",
-      "isShort": true,
-      "isCollaboration": true,
-      "collaborators": [
-        "IgarashiRika",
-        "TachitsuteToto"
       ]
     },
     {
