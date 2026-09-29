@@ -1,18 +1,31 @@
 {
-  "lastUpdated": "2026-09-28T10:00:17.802Z",
+  "lastUpdated": "2026-09-29T09:59:30.517Z",
   "channelId": "UCe22Bcwd_GCpTjLxn83zl7A",
   "channelTitle": "先斗寧 / Ponto Nei 【にじさんじ】",
   "videos": [
     {
-      "id": "SiUDZFPjq7c",
-      "title": "【FE 万紫千紅│03】寄せ集め一家、大剣闘祭に乗り込むの巻 ※ネタバレ注意【先斗寧/にじさんじ】",
-      "thumbnail": "https://img.youtube.com/vi/SiUDZFPjq7c/maxresdefault_live.jpg",
-      "publishedAt": "2026-09-28T03:16:14Z",
+      "id": "kYrJT15cqas",
+      "title": "【FE 万紫千紅│04】子どもたちに気を遣われるパーティですよ、こちらは ※ネタバレ注意【先斗寧/にじさんじ】",
+      "thumbnail": "https://img.youtube.com/vi/kYrJT15cqas/maxresdefault_live.jpg",
+      "publishedAt": "2026-09-29T07:40:11Z",
       "durationDisplay": "0:00",
       "category": "短视频",
       "series": "Fire Emblem",
-      "url": "https://www.youtube.com/watch?v=SiUDZFPjq7c",
+      "url": "https://www.youtube.com/watch?v=kYrJT15cqas",
       "isShort": true,
+      "isCollaboration": false,
+      "collaborators": []
+    },
+    {
+      "id": "SiUDZFPjq7c",
+      "title": "【FE 万紫千紅│03】寄せ集め一家、大剣闘祭に乗り込むの巻 ※ネタバレ注意【先斗寧/にじさんじ】",
+      "thumbnail": "https://img.youtube.com/vi/SiUDZFPjq7c/maxresdefault.jpg",
+      "publishedAt": "2026-09-28T16:28:47Z",
+      "durationDisplay": "3:17:04",
+      "category": "录播",
+      "series": "Fire Emblem",
+      "url": "https://www.youtube.com/watch?v=SiUDZFPjq7c",
+      "isShort": false,
       "isCollaboration": false,
       "collaborators": []
     },
