@@ -1,8 +1,39 @@
 {
-  "lastUpdated": "2026-11-05T11:15:49.543Z",
+  "lastUpdated": "2026-11-06T11:13:07.692Z",
   "channelId": "UCe22Bcwd_GCpTjLxn83zl7A",
   "channelTitle": "先斗寧 / Ponto Nei 【にじさんじ】",
   "videos": [
+    {
+      "id": "T4S26DGQhHs",
+      "title": "T-ARA(티아라)- Roly-Poly(롤리폴리)踊ってみた🪩#티아라 #Roly-Poly #踊ってみた#dance  #にじさんじ #先斗寧",
+      "thumbnail": "https://img.youtube.com/vi/T4S26DGQhHs/maxresdefault.jpg",
+      "publishedAt": "2026-11-06T09:00:05Z",
+      "durationDisplay": "0:38",
+      "category": "短视频",
+      "series": "踊ってみた",
+      "url": "https://www.youtube.com/watch?v=T4S26DGQhHs",
+      "isShort": true,
+      "isCollaboration": false,
+      "collaborators": []
+    },
+    {
+      "id": "9Se_fQx9UQY",
+      "title": "【#にじイカ祭り2026】この愛、獣量級。チーム練習！対抗戦！【先斗寧/にじさんじ】",
+      "thumbnail": "https://img.youtube.com/vi/9Se_fQx9UQY/maxresdefault.jpg",
+      "publishedAt": "2026-11-05T16:46:55Z",
+      "durationDisplay": "2:35:45",
+      "category": "联动",
+      "series": "Splatoon",
+      "url": "https://www.youtube.com/watch?v=9Se_fQx9UQY",
+      "isShort": false,
+      "isCollaboration": true,
+      "collaborators": [
+        "SukoyaKana",
+        "KitakojiHisui",
+        "Lunlun_nijisanji",
+        "ranu_ranu_ranu"
+      ]
+    },
     {
       "id": "-j_h6-FIkz4",
       "title": "【#にじイカ祭り2026】チーム17初顔合わせ！チーム名募集中！対抗戦も！【先斗寧/にじさんじ】",
