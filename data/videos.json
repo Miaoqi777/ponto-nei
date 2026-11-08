@@ -1,18 +1,36 @@
 {
-  "lastUpdated": "2026-11-07T10:29:38.209Z",
+  "lastUpdated": "2026-11-08T10:36:59.944Z",
   "channelId": "UCe22Bcwd_GCpTjLxn83zl7A",
   "channelTitle": "先斗寧 / Ponto Nei 【にじさんじ】",
   "videos": [
     {
+      "id": "OOrHARLbtbY",
+      "title": "【#にじイカ祭り2026】#獣量級WIN 決勝トーナメント！まだまだ遊ぶぞ！【先斗寧/にじさんじ】",
+      "thumbnail": "https://img.youtube.com/vi/OOrHARLbtbY/maxresdefault.jpg",
+      "publishedAt": "2026-11-08T08:06:38Z",
+      "durationDisplay": "3:50:37",
+      "category": "联动",
+      "series": "Splatoon",
+      "url": "https://www.youtube.com/watch?v=OOrHARLbtbY",
+      "isShort": false,
+      "isCollaboration": true,
+      "collaborators": [
+        "SukoyaKana",
+        "KitakojiHisui",
+        "Lunlun_nijisanji",
+        "yam_naka_yam"
+      ]
+    },
+    {
       "id": "4Z74VzqZUZc",
       "title": "【#にじイカ祭り2026】#獣量級WIN 遂に本番！リーグ予選B！【先斗寧/にじさんじ】",
-      "thumbnail": "https://img.youtube.com/vi/4Z74VzqZUZc/maxresdefault.jpg?v=6aeec71a",
-      "publishedAt": "2026-11-07T06:37:11Z",
-      "durationDisplay": "0:00",
+      "thumbnail": "https://img.youtube.com/vi/4Z74VzqZUZc/maxresdefault.jpg",
+      "publishedAt": "2026-11-07T12:43:26Z",
+      "durationDisplay": "4:23:11",
       "category": "联动",
       "series": "Splatoon",
       "url": "https://www.youtube.com/watch?v=4Z74VzqZUZc",
-      "isShort": true,
+      "isShort": false,
       "isCollaboration": true,
       "collaborators": [
         "SukoyaKana",
