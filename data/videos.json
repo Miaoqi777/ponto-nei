@@ -1,18 +1,31 @@
 {
-  "lastUpdated": "2026-11-23T13:19:26.207Z",
+  "lastUpdated": "2026-11-24T14:00:51.590Z",
   "channelId": "UCe22Bcwd_GCpTjLxn83zl7A",
   "channelTitle": "先斗寧 / Ponto Nei 【にじさんじ】",
   "videos": [
     {
-      "id": "6I6M-3to0bw",
-      "title": "【気のせいすぎるRPG】すぎるRPG最新作！なんだか今なら世界救える気がする…【先斗寧/にじさんじ】",
-      "thumbnail": "https://img.youtube.com/vi/6I6M-3to0bw/maxresdefault.jpg?v=6b0430a0",
-      "publishedAt": "2026-11-23T12:25:02Z",
+      "id": "riypiX_H9Jw",
+      "title": "【FE 万紫千紅│24】瘴気やめませんかほんまに；； ※ネタバレ注意【先斗寧/にじさんじ】",
+      "thumbnail": "https://img.youtube.com/vi/riypiX_H9Jw/maxresdefault.jpg?v=6b058346",
+      "publishedAt": "2026-11-24T12:29:56Z",
       "durationDisplay": "0:00",
       "category": "短视频",
+      "series": "Fire Emblem",
+      "url": "https://www.youtube.com/watch?v=riypiX_H9Jw",
+      "isShort": true,
+      "isCollaboration": false,
+      "collaborators": []
+    },
+    {
+      "id": "6I6M-3to0bw",
+      "title": "【気のせいすぎるRPG】すぎるRPG最新作！なんだか今なら世界救える気がする…【先斗寧/にじさんじ】",
+      "thumbnail": "https://img.youtube.com/vi/6I6M-3to0bw/maxresdefault.jpg",
+      "publishedAt": "2026-11-23T14:35:41Z",
+      "durationDisplay": "1:27:01",
+      "category": "录播",
       "series": null,
       "url": "https://www.youtube.com/watch?v=6I6M-3to0bw",
-      "isShort": true,
+      "isShort": false,
       "isCollaboration": false,
       "collaborators": []
     },
